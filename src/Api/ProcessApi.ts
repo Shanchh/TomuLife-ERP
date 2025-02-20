@@ -2,7 +2,7 @@ import axios from "axios";
 
 export const create_user = async (email: string, nickname: string) => {
     try {
-        const res = await axios.post("/create_user", { email, nickname });
+        const res = await axios.post("/auth/create_user", { email, nickname });
         return res.data;
     }
     catch (err) {
@@ -12,7 +12,7 @@ export const create_user = async (email: string, nickname: string) => {
 
 export const get_my_profile = async (email: string | null) => {
     try {
-        const res = await axios.post("/get_my_profile", { email });
+        const res = await axios.post("/user/get_my_profile", { email });
         return res.data?.message;
     }
     catch (err) {
