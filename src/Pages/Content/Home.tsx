@@ -1,8 +1,11 @@
+import { Card } from 'antd'
 import React from 'react'
 
 const Home = () => {
   return (
-    <div>Home</div>
+    <Card style={{ height: "100%", overflow: "auto" }}>
+      Home
+    </Card>
   )
 }
 

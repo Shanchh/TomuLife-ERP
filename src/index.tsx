@@ -2,12 +2,24 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
+import { ConfigProvider } from 'antd';
+
+const theme = {
+  token: {
+    colorPrimary: '#ffaa00',
+    colorInfo: '#faad14',
+    colorWarning: '#fadb14',
+    wireframe: false,
+  },
+};
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
   <React.StrictMode>
-    <App />
+    <ConfigProvider theme={theme}>
+      <App />
+    </ConfigProvider>
   </React.StrictMode>
 );
