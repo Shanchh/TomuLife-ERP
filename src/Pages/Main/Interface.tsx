@@ -1,9 +1,18 @@
-import { Button, message } from 'antd'
-import React from 'react'
+import { Flex } from 'antd'
+import React, { useState } from 'react'
+import MainHeader from './MainHeader'
+import { isMobile } from "react-device-detect";
 
 const Interface = () => {
+  const [collapsed, setCollapsed] = useState<boolean>(isMobile);
+
   return (
-    <Button onClick={() => message.success("成功")}>點擊顯示訊息</Button>
+    <Flex vertical={true} style={{ minHeight: "100vh" }}>
+      <MainHeader
+        onClickCollapsed={() => setCollapsed(!collapsed)}
+      />
+
+    </Flex>
   )
 }
 
