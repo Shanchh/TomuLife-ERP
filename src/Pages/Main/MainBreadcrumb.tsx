@@ -25,7 +25,12 @@ const MainBreadcrumb: React.FC = () => {
         }),
     ];
 
-    return <Breadcrumb style={{ margin: "0 0 12px 0" }} items={breadcrumbItems} />;
+    return (
+        <>
+            <Breadcrumb items={breadcrumbItems} />
+            <span style={{ fontWeight: "bold", fontSize: 20, margin: "10px 0px" }}>{breadcrumbNameMap[location.pathname]}</span>
+        </>
+    );
 };
 
 export default MainBreadcrumb;
