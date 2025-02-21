@@ -14,7 +14,7 @@ def getCurrentUser() -> UserRecord:
     """獲取當前User"""
     try:
         token = getTokenWithHeaders()
-        result = auth.verify_id_token(token)
+        result = auth.verify_id_token(token, clock_skew_seconds=60)
         g.token = token
         g.curUser = auth.get_user(result["user_id"])
         return g.curUser

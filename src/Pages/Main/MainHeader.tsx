@@ -40,7 +40,7 @@ const MainHeader: React.FC<MyHeaderProps> = ({ onClickCollapsed }) => {
                     display: "flex",
                     justifyContent: "space-between",
                     alignItems: "center",
-                    borderBottom: "1px solid #ddd"
+                    borderBottom: "1px solid orange"
                 }}
             >
                 <Flex justify="space-between" align="center" style={{ width: 230 }}>
