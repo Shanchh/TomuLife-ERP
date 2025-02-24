@@ -3,6 +3,10 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import { ConfigProvider } from 'antd';
+import zhTW from "antd/lib/locale/zh_TW";
+import dayjs from "dayjs";
+
+dayjs.locale("zh-tw");
 
 const theme = {
   token: {
@@ -18,7 +22,7 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <React.StrictMode>
-    <ConfigProvider theme={theme}>
+    <ConfigProvider theme={theme} locale={zhTW}>
       <App />
     </ConfigProvider>
   </React.StrictMode>
