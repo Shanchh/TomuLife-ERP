@@ -18,6 +18,7 @@ import SystemCustomerManagement from './Pages/Content/SystemCustomerManagement';
 import SystemProductManagement from './Pages/Content/SystemProductManagement';
 import SystemRoleManagement from './Pages/Content/SystemRoleManagement';
 import SystemUserManagement from './Pages/Content/SystemUserManagement';
+import Setting from './Pages/Main/Setting';
 
 function App() {
   return (
@@ -46,6 +47,8 @@ function App() {
                 <Route path="/system/product-management" element={<SystemProductManagement />} />
                 <Route path="/system/role-management" element={<SystemRoleManagement />} />
                 <Route path="/system/user-management" element={<SystemUserManagement />} />
+
+                <Route path="/setting" element={<Setting />} />
 
               </Route>
             </Route>

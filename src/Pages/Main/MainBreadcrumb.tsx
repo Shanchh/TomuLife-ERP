@@ -21,6 +21,7 @@ const breadcrumbNameMap: Record<string, string> = {
     "/system/product-management": "商品管理",
     "/system/role-management": "角色管理",
     "/system/user-management": "用戶管理",
+    "/setting": "設置",
 };
 
 const MainBreadcrumb: React.FC = () => {
