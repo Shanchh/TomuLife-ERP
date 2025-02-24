@@ -51,11 +51,12 @@ const SystemUserManagement = () => {
     {
       title: "用戶",
       dataIndex: "nickname",
-      width: 200,
+      align: "center",
+      width: 230,
       render: (name: string, record: any) => (
-        <Flex justify="centet" align="center" gap={10} >
+        <Flex justify="center" align="center" gap={10} >
           <Avatar style={{ backgroundColor: "#666" }} icon={<UserOutlined />} />
-          <Flex vertical>
+          <Flex align='start' vertical>
             <span style={{ fontWeight: "bold" }}>{name ?? "未知"}</span>
             <span style={{ color: "#999", fontSize: 12 }}>{record._id}</span>
           </Flex>
