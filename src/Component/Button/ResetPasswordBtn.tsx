@@ -2,8 +2,8 @@ import { Button, Flex, message, Modal } from 'antd'
 import React, { useState } from 'react'
 import { LockOutlined } from '@ant-design/icons';
 import { sendPasswordResetEmail } from 'firebase/auth';
-import { auth } from '../Auth/FirebaseConfig';
-import { useAuth } from '../Auth/AuthProvider';
+import { auth } from '../../Auth/FirebaseConfig';
+import { useAuth } from '../../Auth/AuthProvider';
 
 const ResetPasswordBtn = () => {
     const [modalOpen, setModalOpen] = useState<boolean>(false);

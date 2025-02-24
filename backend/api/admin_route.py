@@ -1,5 +1,6 @@
 from flask import Blueprint, request, jsonify, g
 from config.setting import db
+from bson import ObjectId
 import time
 
 from utils.auth import login_required
@@ -53,6 +54,30 @@ def get_user_list():
             "code": 0,
             "message": "User list retrieved successfully",
             "data": pop_objectId(user_list)
+        }
+
+        return jsonify(result), 200
+    except PermissionError as e:
+        return jsonify({"error": str(e)}), 403
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+    
+@admin_api.route("/modify_user_profile", methods=["POST"])
+@login_required
+def modify_user_profile():
+    try:
+        check_admin(g.curUser.email)
+        
+        data: dict = request.get_json()
+        uid = data["uid"]
+        data = data["data"]
+
+        collection = db["Users"]
+        r = collection.update_one({ "_id": ObjectId(uid) }, { "$set": data })
+
+        result = {
+            "code": 0,
+            "modify_count": r.modified_count
         }
 
         return jsonify(result), 200

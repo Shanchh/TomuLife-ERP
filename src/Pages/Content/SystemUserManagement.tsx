@@ -1,9 +1,11 @@
 import { Avatar, Button, Card, Flex, message, Table, TableProps } from 'antd'
-import { ReloadOutlined, EditOutlined, DeleteOutlined, UserOutlined } from '@ant-design/icons';
+import { ReloadOutlined, UserOutlined } from '@ant-design/icons';
 import React, { useEffect, useState } from 'react'
 import { get_roles, get_user_list } from '../../Api/AdminApi';
 import { Role, User } from '../../../types';
 import RoleTag from '../../Component/RoleTag';
+import DeleteUserBtn from '../../Component/Button/DeleteUserBtn';
+import ModifyUserBtn from '../../Component/Button/ModifyUserBtn';
 
 const SystemUserManagement = () => {
   const [userData, setUserData] = useState<User[]>([]);
@@ -67,15 +69,10 @@ const SystemUserManagement = () => {
     {
       title: "操作",
       align: "center",
-      render: () => (
-        <Flex gap={10}>
-          <Button variant="link" color="default">
-            <EditOutlined />
-          </Button>
-
-          <Button variant="link" color="danger">
-            <DeleteOutlined />
-          </Button>
+      render: (data: User) => (
+        <Flex justify='center' align='center' gap={10}>
+          <ModifyUserBtn data={data} roleData={roleData} refreshData={refreshData}/>
+          <DeleteUserBtn />
         </Flex>
       )
     }
