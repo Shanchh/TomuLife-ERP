@@ -34,6 +34,19 @@ const SystemUserManagement = () => {
     refreshData();
   }, []);
 
+  const handleModifyUser = (id: string, data: { nickname: string, role: string }) => {
+    setUserData(userData.map(user => {
+      if (user._id === id) {
+        return { ...user, nickname: data.nickname, role: data.role };
+      }
+      return user;
+    }));
+  };
+
+  const handleDeleteUser = (id: string) => {
+    setUserData(userData.filter(user => user._id !== id));
+  };
+
   const columns: TableProps["columns"] = [
     {
       title: "用戶",
@@ -71,8 +84,8 @@ const SystemUserManagement = () => {
       align: "center",
       render: (data: User) => (
         <Flex justify='center' align='center' gap={10}>
-          <ModifyUserBtn data={data} roleData={roleData} refreshData={refreshData}/>
-          <DeleteUserBtn />
+          <ModifyUserBtn data={data} roleData={roleData} handleModifyUser={handleModifyUser} />
+          <DeleteUserBtn data={data} handleDeleteUser={handleDeleteUser}/>
         </Flex>
       )
     }

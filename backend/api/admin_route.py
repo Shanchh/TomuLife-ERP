@@ -6,6 +6,7 @@ import time
 from utils.auth import login_required
 from utils.tools import pop_objectId
 from utils.user import get_user_with_uid
+import utils.firebase_config
 
 admin_api = Blueprint("admin_api", __name__)
 
@@ -78,6 +79,32 @@ def modify_user_profile():
         result = {
             "code": 0,
             "modify_count": r.modified_count
+        }
+
+        return jsonify(result), 200
+    except PermissionError as e:
+        return jsonify({"error": str(e)}), 403
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+    
+@admin_api.route("/delete_user_profile", methods=["POST"])
+@login_required
+def delete_user_profile():
+    try:
+        check_admin(g.curUser.email)
+        
+        data: dict = request.get_json()
+        email = data["email"]
+
+        firebase_account = utils.firebase_config.auth.get_user_by_email(email)
+        utils.firebase_config.auth.delete_user(firebase_account.uid)
+
+        collection = db["Users"]
+        r = collection.delete_one({"email": email})
+
+        result = {
+            "code": 0,
+            "delete_count": r.deleted_count
         }
 
         return jsonify(result), 200

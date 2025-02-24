@@ -19,3 +19,13 @@ export const get_user_list = async () => {
         throw err;
     }
 }
+
+export const delete_user_profile = async (email: string) => {
+    try {
+        const res = await axios.post("/admin/delete_user_profile", { email });
+        return res.data;
+    }
+    catch (err) {
+        throw err;
+    }
+}

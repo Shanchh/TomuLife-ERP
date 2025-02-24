@@ -7,10 +7,10 @@ import axios from "axios";
 interface ModifyUserBtnProps {
     data: User;
     roleData: Role[];
-    refreshData: () => void;
+    handleModifyUser: (id: string, data: { nickname: string; role: string }) => void;
 }
 
-const ModifyUserBtn: React.FC<ModifyUserBtnProps> = ({ data, roleData, refreshData }) => {
+const ModifyUserBtn: React.FC<ModifyUserBtnProps> = ({ data, roleData, handleModifyUser }) => {
     const [form] = Form.useForm();
     const [modalOpen, setModalOpen] = useState<boolean>(false);
     const [submitLoading, setSubmitLoading] = useState<boolean>(false);
@@ -27,7 +27,7 @@ const ModifyUserBtn: React.FC<ModifyUserBtnProps> = ({ data, roleData, refreshDa
 
             message.success("更新資料成功");
             setModalOpen(false);
-            refreshData();
+            handleModifyUser(data._id, {nickname: values.nickname, role: values.role});
         } catch (error) {
             message.error("更新資料時出錯");
         } finally {
