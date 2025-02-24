@@ -156,3 +156,38 @@ def delete_role():
         return jsonify({"error": str(e)}), 403
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+    
+@admin_api.route("/add_role", methods=["POST"])
+@login_required
+def add_role():
+    try:
+        check_admin(g.curUser.email)
+        
+        data: dict = request.get_json()
+        values = data["values"]
+
+        submitter = db["Users"].find_one({"email": g.curUser.email})
+
+        insert_data = {
+            **values,
+            "creator": {
+                "_id": str(submitter["_id"]),
+                "nickname": submitter["nickname"],
+                "email": submitter["email"]
+            },
+            "createAt": int(time.time())
+        }
+
+        collection = db["Roles"]
+        r = collection.insert_one(insert_data)
+
+        result = {
+            "code": 0,
+            "insert_data_id": str(r.inserted_id)
+        }
+
+        return jsonify(result), 200
+    except PermissionError as e:
+        return jsonify({"error": str(e)}), 403
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500

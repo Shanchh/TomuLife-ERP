@@ -1,10 +1,11 @@
 import { Badge, Button, Card, Flex, message, Table, TableProps } from 'antd';
-import { ReloadOutlined, PlusOutlined } from '@ant-design/icons';
+import { ReloadOutlined } from '@ant-design/icons';
 import React, { useEffect, useState } from 'react'
 import { Role } from '../../../types';
 import { get_roles } from '../../Api/AdminApi';
 import ModifyRoleBtn from '../../Component/Button/ModifyRoleBtn';
 import DeleteRoleBtn from '../../Component/Button/DeleteRoleBtn';
+import AddRoleBtn from '../../Component/Button/AddRoleBtn';
 
 const SystemRoleManagement = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -71,9 +72,8 @@ const SystemRoleManagement = () => {
     },
     {
       title: "創建時間",
-      dataIndex: "createdAt",
       align: "center",
-      render: (time: number) => <span>{new Date(time * 1000).toLocaleString()}</span>
+      render: (data: Role) => <span>{new Date(data.createAt * 1000).toLocaleString()}</span>
     },
     {
       title: "操作",
@@ -95,10 +95,7 @@ const SystemRoleManagement = () => {
           刷新
         </Button>
 
-        <Button color="primary" variant="link">
-          <PlusOutlined />
-          新增
-        </Button>
+        <AddRoleBtn refreshData={refreshData}/>
       </Flex>
 
       <Table

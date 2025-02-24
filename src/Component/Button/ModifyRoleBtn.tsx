@@ -44,7 +44,7 @@ const ModifyRoleBtn: React.FC<ModifyRoleBtnProps> = ({ data, handleModifyRole })
                 title={
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                         <SafetyOutlined />
-                        <span>編輯身分組</span>
+                        <span>編輯角色</span>
                     </div>
                 }
                 open={modalOpen}
@@ -77,11 +77,11 @@ const ModifyRoleBtn: React.FC<ModifyRoleBtnProps> = ({ data, handleModifyRole })
                     </Form.Item>
 
                     <Form.Item
-                        label={"身分名"}
+                        label={"角色名"}
                         name={"tag"}
                         rules={[{ required: true }]}
                     >
-                        <Input autoComplete="off" placeholder="請輸入身分名" />
+                        <Input autoComplete="off" placeholder="請輸入角色名" />
                     </Form.Item>
 
                     <Form.Item

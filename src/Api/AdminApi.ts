@@ -49,3 +49,13 @@ export const delete_role = async (uid: string) => {
         throw err;
     }
 }
+
+export const add_role = async (values: any) => {
+    try {
+        const res = await axios.post("/admin/add_role", { values });
+        return res.data;
+    }
+    catch (err) {
+        throw err;
+    }
+}
