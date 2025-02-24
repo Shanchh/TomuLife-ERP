@@ -10,7 +10,11 @@ export interface Role {
     _id: string,
     color: string,
     createAt: number,
-    creator: User,
+    creator: {
+        _id: string,
+        nickname: string,
+        email: string,
+    },
     level: number,
     name: string,
     tag: string,

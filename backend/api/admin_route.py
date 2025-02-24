@@ -27,9 +27,6 @@ def get_roles():
         collection = db["Roles"]
         role_list = list(collection.find())
 
-        for role in role_list:
-            role["creator"] = get_user_with_uid(role["creator"])
-
         result = {
             "code": 0,
             "message": "Roles data retrieved successfully",
@@ -101,6 +98,53 @@ def delete_user_profile():
 
         collection = db["Users"]
         r = collection.delete_one({"email": email})
+
+        result = {
+            "code": 0,
+            "delete_count": r.deleted_count
+        }
+
+        return jsonify(result), 200
+    except PermissionError as e:
+        return jsonify({"error": str(e)}), 403
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+    
+@admin_api.route("/modify_role", methods=["POST"])
+@login_required
+def modify_role():
+    try:
+        check_admin(g.curUser.email)
+        
+        data: dict = request.get_json()
+        uid = data["uid"]
+        values = data["values"]
+
+        collection = db["Roles"]
+        r = collection.update_one({ "_id": ObjectId(uid) }, { "$set": values })
+
+        result = {
+            "code": 0,
+            "modify_count": r.modified_count
+        }
+
+        return jsonify(result), 200
+    except PermissionError as e:
+        return jsonify({"error": str(e)}), 403
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+    
+@admin_api.route("/delete_role", methods=["POST"])
+@login_required
+def delete_role():
+    try:
+        check_admin(g.curUser.email)
+        
+        data: dict = request.get_json()
+        uid = data["uid"]
+
+        collection = db["Roles"]
+        r = collection.delete_one({"_id": ObjectId(uid)})
 
         result = {
             "code": 0,

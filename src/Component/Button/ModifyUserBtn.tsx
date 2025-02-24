@@ -27,7 +27,7 @@ const ModifyUserBtn: React.FC<ModifyUserBtnProps> = ({ data, roleData, handleMod
 
             message.success("更新資料成功");
             setModalOpen(false);
-            handleModifyUser(data._id, {nickname: values.nickname, role: values.role});
+            handleModifyUser(data._id, values);
         } catch (error) {
             message.error("更新資料時出錯");
         } finally {

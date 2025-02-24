@@ -29,3 +29,23 @@ export const delete_user_profile = async (email: string) => {
         throw err;
     }
 }
+
+export const modify_role = async (uid: string, values: any) => {
+    try {
+        const res = await axios.post("/admin/modify_role", { uid, values });
+        return res.data;
+    }
+    catch (err) {
+        throw err;
+    }
+}
+
+export const delete_role = async (uid: string) => {
+    try {
+        const res = await axios.post("/admin/delete_role", { uid });
+        return res.data;
+    }
+    catch (err) {
+        throw err;
+    }
+}
