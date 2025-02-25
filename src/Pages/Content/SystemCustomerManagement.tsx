@@ -27,8 +27,13 @@ const SystemCustomerManagement = () => {
     setIsLoading(true);
     try {
       const data = await get_customers();
-      setFilteredData(data);
-      setCustomerData(data);
+
+      const sortedData = [...data].sort((a, b) => {
+        return Number(a.bookkeeping) - Number(b.bookkeeping);
+      });
+
+      setFilteredData(sortedData);
+      setCustomerData(sortedData);
     }
     catch {
       message.error("資料載入錯誤！");
@@ -43,13 +48,13 @@ const SystemCustomerManagement = () => {
   }, []);
 
   const handleModifyCustomer = (id: string, data: Partial<Customer>) => {
-    setCustomerData(customerData.map(customer =>
+    setFilteredData(filteredData.map(customer =>
       customer._id === id ? { ...customer, ...data } : customer
     ));
   };
 
   const handleDeleteCustomer = (id: string) => {
-    setCustomerData(customerData.filter(customer => customer._id !== id));
+    setFilteredData(filteredData.filter(customer => customer._id !== id));
   };
 
   const onFinish = async (values: Filter) => {
@@ -137,7 +142,7 @@ const SystemCustomerManagement = () => {
           <Button htmlType="submit" type="primary" icon={<SearchOutlined />} loading={searchLoading}>
             條件查詢
           </Button>
-          <Button htmlType="reset" type="default">
+          <Button htmlType="reset" type="default" onClick={() => setFilteredData(customerData)}>
             清除條件
           </Button>
         </Flex>

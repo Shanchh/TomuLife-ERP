@@ -17,6 +17,7 @@ const AddCustomerBtn: React.FC<AddCustomerBtnProps> = ({ refreshData }) => {
         try {
             setSubmitLoading(true);
             const values = await form.validateFields();
+            console.log(values);
 
             if (typeof values.color === "object" && values.color.toHexString) {
                 values.color = values.color.toHexString();
@@ -65,7 +66,12 @@ const AddCustomerBtn: React.FC<AddCustomerBtnProps> = ({ refreshData }) => {
                     form={form}
                     layout="vertical"
                     initialValues={{
-                        areaCode: "T"
+                        areaCode: "T",
+                        deliveryAddress: "",
+                        contactPerson: "",
+                        contactMethod: "",
+                        invoiceTitle: "",
+                        taxId: "",
                     }}
                 >
 
