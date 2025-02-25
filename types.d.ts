@@ -41,3 +41,18 @@ export interface Customer {
     };
     createAt: number;
 }
+
+export interface Product {
+    _id: string;
+    productName: string;
+    bottlesPerBox: number;
+    retailPrice: number;
+    costPerBox: number | null;
+    costPerBottle: number | null;
+    creator: {
+        _id: string;
+        nickname: string;
+        email: string;
+    };
+    createAt: number;
+}

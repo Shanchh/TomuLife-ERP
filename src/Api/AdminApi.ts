@@ -99,3 +99,13 @@ export const add_customer = async (values: any) => {
         throw err;
     }
 }
+
+export const get_products = async () => {
+    try {
+        const res = await axios.get("/admin/get_products");
+        return res.data.data;
+    }
+    catch (err) {
+        throw err;
+    }
+}

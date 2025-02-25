@@ -199,12 +199,12 @@ def get_customers():
         check_admin(g.curUser.email)
 
         collection = db["Customers"]
-        role_list = list(collection.find())
+        customer_list = list(collection.find())
 
         result = {
             "code": 0,
             "message": "Customers data retrieved successfully",
-            "data": pop_objectId(role_list)
+            "data": pop_objectId(customer_list)
         }
 
         return jsonify(result), 200
@@ -294,3 +294,24 @@ def add_customer():
         return jsonify({"error": str(e)}), 403
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+    
+@admin_api.route("/get_products", methods=["GET"])
+@login_required
+def get_products():
+    try:
+        check_admin(g.curUser.email)
+
+        collection = db["Products"]
+        product_list = list(collection.find())
+
+        result = {
+            "code": 0,
+            "message": "Products data retrieved successfully",
+            "data": pop_objectId(product_list)
+        }
+
+        return jsonify(result), 200
+    except PermissionError as e:
+        return jsonify({"error": str(e)}), 403
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500  
