@@ -4,8 +4,8 @@ import React, { useEffect, useState } from 'react'
 import { Role } from '../../../types';
 import { get_roles } from '../../Api/AdminApi';
 import ModifyRoleBtn from '../../Component/System/ModifyRoleBtn';
-import DeleteRoleBtn from '../../Component/System/DeleteRoleBtn';
 import AddRoleBtn from '../../Component/System/AddRoleBtn';
+import DeleteItemBtn from '../../Component/System/DeleteItemBtn';
 
 const SystemRoleManagement = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -81,7 +81,7 @@ const SystemRoleManagement = () => {
       render: (data: Role) => (
         <Flex justify='center' align='center' gap={10}>
           <ModifyRoleBtn data={data} handleModifyRole={handleModifyRole} />
-          <DeleteRoleBtn data={data} handleDeleteRole={handleDeleteRole} />
+          <DeleteItemBtn type='role' data={data} handleDelete={handleDeleteRole} />
         </Flex>
       )
     }

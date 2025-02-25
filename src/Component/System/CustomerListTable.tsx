@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import { Customer } from '../../../types';
 import ModifyCustomerBtn from './ModifyCustomerBtn';
 import { locations } from '../../Constants/locations';
-import DeleteCustomerBtn from './DeleteCustomerBtn';
+import DeleteItemBtn from './DeleteItemBtn';
 
 interface CustomerListTableProps {
     data: Customer[];
@@ -73,7 +73,7 @@ const CustomerListTable: React.FC<CustomerListTableProps> = ({ data, isLoading, 
             render: (data: Customer) => (
                 <Flex justify='center' align='center' gap={10}>
                     <ModifyCustomerBtn data={data} handleModifyCustomer={handleModifyCustomer} />
-                    <DeleteCustomerBtn data={data} handleDeleteCustomer={handleDeleteCustomer} />
+                    <DeleteItemBtn type='customer' data={data} handleDelete={handleDeleteCustomer} />
                 </Flex>
             )
         }

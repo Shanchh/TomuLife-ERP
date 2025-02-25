@@ -4,8 +4,8 @@ import React, { useEffect, useState } from 'react'
 import { get_roles, get_user_list } from '../../Api/AdminApi';
 import { Role, User } from '../../../types';
 import RoleTag from '../../Component/RoleTag';
-import DeleteUserBtn from '../../Component/System/DeleteUserBtn';
 import ModifyUserBtn from '../../Component/System/ModifyUserBtn';
+import DeleteItemBtn from '../../Component/System/DeleteItemBtn';
 
 const SystemUserManagement = () => {
   const [userData, setUserData] = useState<User[]>([]);
@@ -86,7 +86,7 @@ const SystemUserManagement = () => {
       render: (data: User) => (
         <Flex justify='center' align='center' gap={10}>
           <ModifyUserBtn data={data} roleData={roleData} handleModifyUser={handleModifyUser} />
-          <DeleteUserBtn data={data} handleDeleteUser={handleDeleteUser}/>
+          <DeleteItemBtn type='user' data={data} handleDelete={handleDeleteUser} />
         </Flex>
       )
     }
