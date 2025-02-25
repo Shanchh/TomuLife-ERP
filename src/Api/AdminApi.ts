@@ -59,3 +59,43 @@ export const add_role = async (values: any) => {
         throw err;
     }
 }
+
+export const get_customers = async () => {
+    try {
+        const res = await axios.get("/admin/get_customers");
+        return res.data.data;
+    }
+    catch (err) {
+        throw err;
+    }
+}
+
+export const modify_customer = async (uid: string, values: any) => {
+    try {
+        const res = await axios.post("/admin/modify_customer", { uid, values });
+        return res.data;
+    }
+    catch (err) {
+        throw err;
+    }
+}
+
+export const delete_customer = async (uid: string) => {
+    try {
+        const res = await axios.post("/admin/delete_customer", { uid });
+        return res.data;
+    }
+    catch (err) {
+        throw err;
+    }
+}
+
+export const add_customer = async (values: any) => {
+    try {
+        const res = await axios.post("/admin/add_customer", { values });
+        return res.data;
+    }
+    catch (err) {
+        throw err;
+    }
+}
