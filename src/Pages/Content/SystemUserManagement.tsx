@@ -4,8 +4,8 @@ import React, { useEffect, useState } from 'react'
 import { get_roles, get_user_list } from '../../Api/AdminApi';
 import { Role, User } from '../../../types';
 import RoleTag from '../../Component/RoleTag';
-import DeleteUserBtn from '../../Component/Button/DeleteUserBtn';
-import ModifyUserBtn from '../../Component/Button/ModifyUserBtn';
+import DeleteUserBtn from '../../Component/System/DeleteUserBtn';
+import ModifyUserBtn from '../../Component/System/ModifyUserBtn';
 
 const SystemUserManagement = () => {
   const [userData, setUserData] = useState<User[]>([]);

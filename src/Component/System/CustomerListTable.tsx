@@ -1,9 +1,9 @@
 import { Flex, Table, TableProps } from 'antd'
 import React, { useState } from 'react'
 import { Customer } from '../../../types';
-import ModifyCustomerBtn from '../Button/ModifyCustomerBtn';
+import ModifyCustomerBtn from './ModifyCustomerBtn';
 import { locations } from '../../Constants/locations';
-import DeleteCustomerBtn from '../Button/DeleteCustomerBtn';
+import DeleteCustomerBtn from './DeleteCustomerBtn';
 
 interface CustomerListTableProps {
     data: Customer[];

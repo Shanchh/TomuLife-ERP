@@ -3,9 +3,9 @@ import { ReloadOutlined } from '@ant-design/icons';
 import React, { useEffect, useState } from 'react'
 import { Role } from '../../../types';
 import { get_roles } from '../../Api/AdminApi';
-import ModifyRoleBtn from '../../Component/Button/ModifyRoleBtn';
-import DeleteRoleBtn from '../../Component/Button/DeleteRoleBtn';
-import AddRoleBtn from '../../Component/Button/AddRoleBtn';
+import ModifyRoleBtn from '../../Component/System/ModifyRoleBtn';
+import DeleteRoleBtn from '../../Component/System/DeleteRoleBtn';
+import AddRoleBtn from '../../Component/System/AddRoleBtn';
 
 const SystemRoleManagement = () => {
   const [isLoading, setIsLoading] = useState(true);
