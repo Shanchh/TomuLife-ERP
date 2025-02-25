@@ -93,7 +93,16 @@ const ModifyCustomerBtn: React.FC<ModifyRoleBtnProps> = ({ data, handleModifyCus
                             style={{ width: '50%' }}
                         >
                             <Select
-                                options={Object.values(locations).map(e => ({ label: e.code + "-" + e.name, value: e.code }))}
+                                showSearch
+                                allowClear
+                                placeholder="請輸入或選擇縣市"
+                                options={Object.values(locations).map(e => ({
+                                    label: `${e.code} - ${e.name}`,
+                                    value: e.code
+                                }))}
+                                filterOption={(input, option) =>
+                                    (option?.label ?? "").toLowerCase().includes(input.toLowerCase())
+                                }
                             />
                         </Form.Item>
 
