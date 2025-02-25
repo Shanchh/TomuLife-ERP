@@ -109,3 +109,23 @@ export const get_products = async () => {
         throw err;
     }
 }
+
+export const modify_product = async (uid: string, values: any) => {
+    try {
+        const res = await axios.post("/admin/modify_product", { uid, values });
+        return res.data;
+    }
+    catch (err) {
+        throw err;
+    }
+}
+
+export const delete_product = async (uid: string) => {
+    try {
+        const res = await axios.post("/admin/delete_product", { uid });
+        return res.data;
+    }
+    catch (err) {
+        throw err;
+    }
+}

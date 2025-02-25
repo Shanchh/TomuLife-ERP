@@ -3,6 +3,8 @@ import { ReloadOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons'
 import React, { useEffect, useState } from 'react'
 import { Product } from '../../../types';
 import { get_products } from '../../Api/AdminApi';
+import ModifyProductBtn from '../../Component/System/ModifyProductBtn';
+import DeleteItemBtn from '../../Component/System/DeleteItemBtn';
 
 const SystemProductManagement = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -27,6 +29,16 @@ const SystemProductManagement = () => {
   useEffect(() => {
     refreshData();
   }, []);
+
+  const handleModifyProduct = (id: string, data: Partial<Product>) => {
+    setProductData(productData.map(product =>
+      product._id === id ? { ...product, ...data } : product
+    ));
+  };
+
+  const handleDeleteProduct = (id: string) => {
+    setProductData(productData.filter(product => product._id !== id));
+  };
 
   const columns: TableProps["columns"] = [
     {
@@ -71,12 +83,8 @@ const SystemProductManagement = () => {
       align: "center",
       render: (data: Product) => (
         <Flex justify='center' align='center' gap={10}>
-          <Button variant="link" color="default">
-            <EditOutlined />
-          </Button>
-          <Button variant="link" color="danger" >
-            <DeleteOutlined />
-          </Button>
+          <ModifyProductBtn data={data} handleModifyProduct={handleModifyProduct} />
+          <DeleteItemBtn type='product' data={data} handleDelete={handleDeleteProduct} />
         </Flex>
       )
     }

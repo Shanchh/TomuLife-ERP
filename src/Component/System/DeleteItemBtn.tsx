@@ -1,9 +1,9 @@
 import { Button, message, Modal } from 'antd';
 import { DeleteOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 import React, { useState } from 'react';
-import { delete_customer, delete_role, delete_user_profile } from '../../Api/AdminApi';
+import { delete_customer, delete_product, delete_role, delete_user_profile } from '../../Api/AdminApi';
 
-type ItemType = 'customer' | 'role' | 'user';
+type ItemType = 'customer' | 'role' | 'user' | 'product';
 
 interface DeleteItemBtnProps<T> {
     type: ItemType;
@@ -37,6 +37,13 @@ const DeleteItemBtn = <T extends { _id: string } & Record<string, any>>({ type, 
                     message: `請確認是否將 ${data.nickname} 用戶資料刪除？`,
                     successMsg: '成功刪除用戶！',
                     title: '刪除用戶'
+                };
+            case 'product':
+                return {
+                    api: () => delete_product(data._id),
+                    message: `請確認是否將 ${data.tag} 這個商品刪除？`,
+                    successMsg: '成功刪除商品！',
+                    title: '刪除商品'
                 };
             default:
                 throw new Error('未知類型');

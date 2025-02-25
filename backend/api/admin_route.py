@@ -315,3 +315,50 @@ def get_products():
         return jsonify({"error": str(e)}), 403
     except Exception as e:
         return jsonify({"error": str(e)}), 500  
+
+@admin_api.route("/modify_product", methods=["POST"])
+@login_required
+def modify_product():
+    try:
+        check_admin(g.curUser.email)
+        
+        data: dict = request.get_json()
+        uid = data["uid"]
+        values = data["values"]
+
+        collection = db["Products"]
+        r = collection.update_one({ "_id": ObjectId(uid) }, { "$set": values })
+
+        result = {
+            "code": 0,
+            "modify_count": r.modified_count
+        }
+
+        return jsonify(result), 200
+    except PermissionError as e:
+        return jsonify({"error": str(e)}), 403
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+    
+@admin_api.route("/delete_product", methods=["POST"])
+@login_required
+def delete_product():
+    try:
+        check_admin(g.curUser.email)
+        
+        data: dict = request.get_json()
+        uid = data["uid"]
+
+        collection = db["Products"]
+        r = collection.delete_one({"_id": ObjectId(uid)})
+
+        result = {
+            "code": 0,
+            "delete_count": r.deleted_count
+        }
+
+        return jsonify(result), 200
+    except PermissionError as e:
+        return jsonify({"error": str(e)}), 403
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
