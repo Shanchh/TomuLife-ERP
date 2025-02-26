@@ -1,7 +1,7 @@
 from flask import Flask, send_from_directory
 import os
 
-from api import auth_api, user_api, system_api
+from api import auth_api, user_api, system_api, finance_api
 
 app = Flask(__name__, static_folder="build/static", template_folder="build")
 app.secret_key = "9999"
@@ -10,6 +10,7 @@ port = 7720
 app.register_blueprint(auth_api, url_prefix="/auth")
 app.register_blueprint(user_api, url_prefix="/user")
 app.register_blueprint(system_api, url_prefix="/system")
+app.register_blueprint(finance_api, url_prefix="/finance")
 
 @app.route("/")
 def index():

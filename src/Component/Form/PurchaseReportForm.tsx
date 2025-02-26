@@ -2,14 +2,18 @@ import { Button, Card, Col, DatePicker, Flex, Form, Input, message, Row, Select,
 import React, { useEffect, useState, useMemo } from 'react';
 import { Product } from '../../../types';
 import { get_products } from '../../Api/SystemApi';
+import { purchase_orders } from "../../Api/FinanceApi";
+import { useNavigate } from "react-router-dom";
 
 const PurchaseReportForm = () => {
     const [form] = Form.useForm();
+    const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [productList, setProductList] = useState<Product[]>([]);
     const [selectedProducts, setSelectedProducts] = useState<Product[]>([]);
     const [selectedProductId, setSelectedProductId] = useState<string | null>(null);
     const [amounts, setAmounts] = useState<{ [key: string]: number }>({});
+    const [isSubmitLoading, setIsSubmitLoading] = useState<boolean>(false);
 
     useEffect(() => {
         setIsLoading(true);
@@ -89,11 +93,13 @@ const PurchaseReportForm = () => {
         return Object.values(amounts).reduce((sum, value) => sum + value, 0);
     }, [amounts]);
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
+        setIsSubmitLoading(true);
         const values = form.getFieldsValue();
 
         if (selectedProducts.length === 0) {
             message.error("請至少選擇一個產品");
+            setIsSubmitLoading(false);
             return;
         }
 
@@ -109,13 +115,20 @@ const PurchaseReportForm = () => {
                 }
             });
         }
-    
-        console.log({
-            purchaseDate: values.purchaseDate,
-            products: transformedData,
-            totalAmount: totalAmount,
-            remarks: values.remarks || ""
-        });
+
+        const timestamp = new Date(values.purchaseDate).getTime() / 1000;
+        try {
+            await purchase_orders(timestamp, transformedData, totalAmount, values.remarks || "");
+            message.success("成功創建進貨訂單");
+            form.resetFields();
+            navigate("/finance/purchase-management/details");
+        }
+        catch {
+            message.error("創建進貨訂單發生錯誤！");
+        }
+        finally {
+            setIsSubmitLoading(false);
+        }
     };    
 
     return (
@@ -226,7 +239,7 @@ const PurchaseReportForm = () => {
                         <span style={{ fontSize: 18, fontWeight: 'bold' }}>
                             總金額: ${totalAmount.toLocaleString()}
                         </span>
-                        <Button type="primary" htmlType="submit">提交</Button>
+                        <Button type="primary" htmlType="submit" loading={isSubmitLoading}>提交</Button>
                     </Flex>
                 </Card>
             </Form>
