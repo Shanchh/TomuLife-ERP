@@ -87,7 +87,7 @@ def purchase_orders():
 def get_purchase_orders():
     try:
         collection = db["PurchaseOrders"]
-        role_list = list(collection.find())
+        role_list = list(collection.find().sort("purchaseAt", -1))
 
         result = {
             "code": 0,
