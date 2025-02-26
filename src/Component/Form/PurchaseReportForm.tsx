@@ -109,18 +109,19 @@ const PurchaseReportForm = () => {
                 }
             });
         }
-
+    
         console.log({
             purchaseDate: values.purchaseDate,
             products: transformedData,
-            totalAmount: totalAmount
+            totalAmount: totalAmount,
+            remarks: values.remarks || ""
         });
-    };
+    };    
 
     return (
         <Spin spinning={isLoading}>
             <Form size={"small"} form={form} layout="vertical" onFinish={handleSubmit}>
-                <Card style={{ padding: 16, marginBottom: 16, borderRadius: 8 }}>
+                <Card style={{ padding: "16px 0", marginBottom: 16, borderRadius: 8 }}>
                     <Row gutter={24}>
                         <Col xs={24} sm={24} md={12}>
                             <Form.Item
@@ -207,7 +208,20 @@ const PurchaseReportForm = () => {
                     </Card>
                 ))}
 
-                <Card style={{ padding: 16, marginTop: 20 }}>
+                <Card style={{ marginTop: 20 }}>
+                    <Form.Item
+                        label="進貨備註說明"
+                        name="remarks"
+                    >
+                        <Input.TextArea
+                            placeholder="備註內容"
+                            rows={3}
+                            allowClear
+                        />
+                    </Form.Item>
+                </Card>
+
+                <Card style={{ marginTop: 20 }}>
                     <Flex justify='space-between' align="center">
                         <span style={{ fontSize: 18, fontWeight: 'bold' }}>
                             總金額: ${totalAmount.toLocaleString()}
