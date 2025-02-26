@@ -8,3 +8,12 @@ export const purchase_orders = async (purchaseDate: number, products: any, total
         throw err;
     }
 };
+
+export const get_purchase_orders = async () => {
+    try {
+        const res = await axios.get("/finance/get_purchase_orders");
+        return res.data.data;
+    } catch (err) {
+        throw err;
+    }
+};

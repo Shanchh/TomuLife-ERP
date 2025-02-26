@@ -56,3 +56,26 @@ export interface Product {
     };
     createAt: number;
 }
+
+export interface PurchaseProduct {
+    productID: string;
+    costPerBottle: number;
+    purchaseQuantityBottles: number;
+    costPerBox: number;
+    purchaseQuantityBoxes: number;
+    itemAmount: number;
+}
+
+export interface PurchaseOrder {
+    _id: string;
+    purchaseAt: number;
+    products: PurchaseProduct[];
+    totalAmount: number;
+    remarks: string;
+    creator: {
+        _id: string;
+        nickname: string;
+        email: string;
+    };
+    createdAt: number;
+}

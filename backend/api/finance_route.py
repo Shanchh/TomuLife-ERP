@@ -19,6 +19,8 @@ def purchase_orders():
         remarks = data.get("remarks", "")
         total_amount = data.get("totalAmount")
 
+        submitter = db["Users"].find_one({"email": g.curUser.email})
+
         # 檢查必要欄位是否存在
         missing_fields = [field for field in ["products", "purchaseDate", "totalAmount"] if field not in data]
         if missing_fields:
@@ -64,6 +66,11 @@ def purchase_orders():
             "products": product_details,
             "totalAmount": total_amount,
             "remarks": remarks,
+            "creator": {
+                "_id": str(submitter["_id"]),
+                "nickname": submitter["nickname"],
+                "email": submitter["email"]
+            },
             "createdAt": int(time.time())
         }
 
@@ -71,5 +78,23 @@ def purchase_orders():
 
         return jsonify({"message": "Purchase order created successfully", "orderID": str(result.inserted_id)}), 200
 
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@finance_api.route("/get_purchase_orders", methods=["GET"])
+@login_required
+@admin_required
+def get_purchase_orders():
+    try:
+        collection = db["PurchaseOrders"]
+        role_list = list(collection.find())
+
+        result = {
+            "code": 0,
+            "message": "PurchaseOrders data retrieved successfully",
+            "data": pop_objectId(role_list)
+        }
+
+        return jsonify(result), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
