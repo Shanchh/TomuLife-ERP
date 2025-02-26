@@ -5,6 +5,7 @@ import { Product } from '../../../types';
 import { get_products } from '../../Api/AdminApi';
 import ModifyProductBtn from '../../Component/System/ModifyProductBtn';
 import DeleteItemBtn from '../../Component/System/DeleteItemBtn';
+import AddProductBtn from '../../Component/System/AddProductBtn';
 
 const SystemProductManagement = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -92,11 +93,12 @@ const SystemProductManagement = () => {
 
   return (
     <Card style={{ height: "100%", overflow: "auto" }}>
-      <Flex style={{ marginBottom: 15 }}>
+      <Flex gap={10} style={{ marginBottom: 15 }}>
         <Button type="primary" onClick={refreshData}>
           <ReloadOutlined />
           刷新
         </Button>
+        <AddProductBtn refreshData={refreshData} />
 
       </Flex>
       <Table

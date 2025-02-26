@@ -129,3 +129,13 @@ export const delete_product = async (uid: string) => {
         throw err;
     }
 }
+
+export const add_product = async (values: any) => {
+    try {
+        const res = await axios.post("/admin/add_product", { values });
+        return res.data;
+    }
+    catch (err) {
+        throw err;
+    }
+}

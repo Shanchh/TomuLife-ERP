@@ -41,7 +41,7 @@ const DeleteItemBtn = <T extends { _id: string } & Record<string, any>>({ type, 
             case 'product':
                 return {
                     api: () => delete_product(data._id),
-                    message: `請確認是否將 ${data.tag} 這個商品刪除？`,
+                    message: `請確認是否將 ${data.productName} 這個商品刪除？`,
                     successMsg: '成功刪除商品！',
                     title: '刪除商品'
                 };
