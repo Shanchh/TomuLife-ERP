@@ -2,7 +2,7 @@ import { Button, Flex, Form, Input, message, Modal, Select } from 'antd';
 import { PlusOutlined, ShopOutlined } from '@ant-design/icons';
 import React, { useState } from 'react'
 import { locations } from '../../Constants/locations';
-import { add_customer } from '../../Api/AdminApi';
+import { add_customer } from '../../Api/SystemApi';
 
 interface AddCustomerBtnProps {
     refreshData: () => void;

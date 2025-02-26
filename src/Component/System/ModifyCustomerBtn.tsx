@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import { EditOutlined, ShopOutlined } from '@ant-design/icons';
 import { Customer } from '../../../types';
 import { locations } from '../../Constants/locations';
-import { modify_customer } from '../../Api/AdminApi';
+import { modify_customer } from '../../Api/SystemApi';
 
 interface ModifyRoleBtnProps {
     data: Customer;

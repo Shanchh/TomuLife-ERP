@@ -2,7 +2,7 @@ import { EditOutlined, TagsOutlined } from '@ant-design/icons'
 import { Button, Flex, Form, Input, message, Modal } from 'antd'
 import React, { useState } from 'react'
 import { Product } from '../../../types';
-import { modify_product } from '../../Api/AdminApi';
+import { modify_product } from '../../Api/SystemApi';
 
 interface ModifyProductBtnProps {
     data: Product;

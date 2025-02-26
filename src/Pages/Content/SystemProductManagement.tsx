@@ -2,7 +2,7 @@ import { Button, Card, Flex, message, Table, TableProps } from 'antd'
 import { ReloadOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import React, { useEffect, useState } from 'react'
 import { Product } from '../../../types';
-import { get_products } from '../../Api/AdminApi';
+import { get_products } from '../../Api/SystemApi';
 import ModifyProductBtn from '../../Component/System/ModifyProductBtn';
 import DeleteItemBtn from '../../Component/System/DeleteItemBtn';
 import AddProductBtn from '../../Component/System/AddProductBtn';

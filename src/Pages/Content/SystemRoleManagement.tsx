@@ -2,7 +2,7 @@ import { Badge, Button, Card, Flex, message, Table, TableProps } from 'antd';
 import { ReloadOutlined } from '@ant-design/icons';
 import React, { useEffect, useState } from 'react'
 import { Role } from '../../../types';
-import { get_roles } from '../../Api/AdminApi';
+import { get_roles } from '../../Api/SystemApi';
 import ModifyRoleBtn from '../../Component/System/ModifyRoleBtn';
 import AddRoleBtn from '../../Component/System/AddRoleBtn';
 import DeleteItemBtn from '../../Component/System/DeleteItemBtn';

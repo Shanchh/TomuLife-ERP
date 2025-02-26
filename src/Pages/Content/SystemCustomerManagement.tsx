@@ -2,7 +2,7 @@ import { Button, Card, Col, Flex, Form, Input, message, Row, Select } from 'antd
 import { ReloadOutlined, SearchOutlined, UserOutlined, ProfileOutlined, HomeOutlined } from '@ant-design/icons';
 import React, { useEffect, useState } from 'react'
 import AddCustomerBtn from '../../Component/System/AddCustomerBtn';
-import { get_customers } from '../../Api/AdminApi';
+import { get_customers } from '../../Api/SystemApi';
 import CustomerListTable from '../../Component/System/CustomerListTable';
 import { Customer } from '../../../types';
 import { locations } from '../../Constants/locations';

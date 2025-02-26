@@ -20,7 +20,7 @@ const ModifyUserBtn: React.FC<ModifyUserBtnProps> = ({ data, roleData, handleMod
             const values = await form.validateFields();
             setSubmitLoading(true);
 
-            await axios.post("/admin/modify_user_profile", {
+            await axios.post("/system/modify_user_profile", {
                 data: values,
                 uid: data._id
             });

@@ -1,7 +1,7 @@
 import { Button, message, Modal } from 'antd';
 import { DeleteOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 import React, { useState } from 'react';
-import { delete_customer, delete_product, delete_role, delete_user_profile } from '../../Api/AdminApi';
+import { delete_customer, delete_product, delete_role, delete_user_profile } from '../../Api/SystemApi';
 
 type ItemType = 'customer' | 'role' | 'user' | 'product';
 

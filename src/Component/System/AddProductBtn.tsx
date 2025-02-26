@@ -1,7 +1,7 @@
 import { PlusOutlined, ShopOutlined } from '@ant-design/icons'
 import { Button, Flex, Form, Input, message, Modal } from 'antd'
 import React, { useState } from 'react'
-import { add_product } from '../../Api/AdminApi';
+import { add_product } from '../../Api/SystemApi';
 
 interface AddProductBtnProps {
     refreshData: () => void;

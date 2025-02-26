@@ -2,7 +2,7 @@ import axios from "axios";
 
 export const get_roles = async () => {
     try {
-        const res = await axios.get("/admin/get_roles");
+        const res = await axios.get("/system/get_roles");
         return res.data.data;
     }
     catch (err) {
@@ -12,7 +12,7 @@ export const get_roles = async () => {
 
 export const get_user_list = async () => {
     try {
-        const res = await axios.get("/admin/get_user_list");
+        const res = await axios.get("/system/get_user_list");
         return res.data.data;
     }
     catch (err) {
@@ -22,7 +22,7 @@ export const get_user_list = async () => {
 
 export const delete_user_profile = async (email: string) => {
     try {
-        const res = await axios.post("/admin/delete_user_profile", { email });
+        const res = await axios.post("/system/delete_user_profile", { email });
         return res.data;
     }
     catch (err) {
@@ -32,7 +32,7 @@ export const delete_user_profile = async (email: string) => {
 
 export const modify_role = async (uid: string, values: any) => {
     try {
-        const res = await axios.post("/admin/modify_role", { uid, values });
+        const res = await axios.post("/system/modify_role", { uid, values });
         return res.data;
     }
     catch (err) {
@@ -42,7 +42,7 @@ export const modify_role = async (uid: string, values: any) => {
 
 export const delete_role = async (uid: string) => {
     try {
-        const res = await axios.post("/admin/delete_role", { uid });
+        const res = await axios.post("/system/delete_role", { uid });
         return res.data;
     }
     catch (err) {
@@ -52,7 +52,7 @@ export const delete_role = async (uid: string) => {
 
 export const add_role = async (values: any) => {
     try {
-        const res = await axios.post("/admin/add_role", { values });
+        const res = await axios.post("/system/add_role", { values });
         return res.data;
     }
     catch (err) {
@@ -62,7 +62,7 @@ export const add_role = async (values: any) => {
 
 export const get_customers = async () => {
     try {
-        const res = await axios.get("/admin/get_customers");
+        const res = await axios.get("/system/get_customers");
         return res.data.data;
     }
     catch (err) {
@@ -72,7 +72,7 @@ export const get_customers = async () => {
 
 export const modify_customer = async (uid: string, values: any) => {
     try {
-        const res = await axios.post("/admin/modify_customer", { uid, values });
+        const res = await axios.post("/system/modify_customer", { uid, values });
         return res.data;
     }
     catch (err) {
@@ -82,7 +82,7 @@ export const modify_customer = async (uid: string, values: any) => {
 
 export const delete_customer = async (uid: string) => {
     try {
-        const res = await axios.post("/admin/delete_customer", { uid });
+        const res = await axios.post("/system/delete_customer", { uid });
         return res.data;
     }
     catch (err) {
@@ -92,7 +92,7 @@ export const delete_customer = async (uid: string) => {
 
 export const add_customer = async (values: any) => {
     try {
-        const res = await axios.post("/admin/add_customer", { values });
+        const res = await axios.post("/system/add_customer", { values });
         return res.data;
     }
     catch (err) {
@@ -102,7 +102,7 @@ export const add_customer = async (values: any) => {
 
 export const get_products = async () => {
     try {
-        const res = await axios.get("/admin/get_products");
+        const res = await axios.get("/system/get_products");
         return res.data.data;
     }
     catch (err) {
@@ -112,7 +112,7 @@ export const get_products = async () => {
 
 export const modify_product = async (uid: string, values: any) => {
     try {
-        const res = await axios.post("/admin/modify_product", { uid, values });
+        const res = await axios.post("/system/modify_product", { uid, values });
         return res.data;
     }
     catch (err) {
@@ -122,7 +122,7 @@ export const modify_product = async (uid: string, values: any) => {
 
 export const delete_product = async (uid: string) => {
     try {
-        const res = await axios.post("/admin/delete_product", { uid });
+        const res = await axios.post("/system/delete_product", { uid });
         return res.data;
     }
     catch (err) {
@@ -132,7 +132,7 @@ export const delete_product = async (uid: string) => {
 
 export const add_product = async (values: any) => {
     try {
-        const res = await axios.post("/admin/add_product", { values });
+        const res = await axios.post("/system/add_product", { values });
         return res.data;
     }
     catch (err) {

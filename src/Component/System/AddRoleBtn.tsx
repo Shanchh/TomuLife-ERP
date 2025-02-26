@@ -1,7 +1,7 @@
 import { Button, ColorPicker, Flex, Form, Input, InputNumber, message, Modal } from 'antd'
 import React, { useState } from 'react'
 import { PlusOutlined, SafetyOutlined } from '@ant-design/icons';
-import { add_role } from '../../Api/AdminApi';
+import { add_role } from '../../Api/SystemApi';
 
 interface AddRoleBtnProps {
     refreshData: () => void;

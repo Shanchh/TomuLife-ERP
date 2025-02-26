@@ -8,7 +8,7 @@ from utils.tools import pop_objectId
 from utils.user import get_user_with_uid
 import utils.firebase_config
 
-admin_api = Blueprint("admin_api", __name__)
+system_api = Blueprint("system_api", __name__)
 
 def check_admin(email):
     adminList = ["admin"]
@@ -18,7 +18,7 @@ def check_admin(email):
     if user["role"] not in adminList:
         raise PermissionError("No administrator privileges")
     
-@admin_api.route("/get_roles", methods=["GET"])
+@system_api.route("/get_roles", methods=["GET"])
 @login_required
 def get_roles():
     try:
@@ -39,7 +39,7 @@ def get_roles():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-@admin_api.route("/get_user_list", methods=["GET"])
+@system_api.route("/get_user_list", methods=["GET"])
 @login_required
 def get_user_list():
     try:
@@ -60,7 +60,7 @@ def get_user_list():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
     
-@admin_api.route("/modify_user_profile", methods=["POST"])
+@system_api.route("/modify_user_profile", methods=["POST"])
 @login_required
 def modify_user_profile():
     try:
@@ -84,7 +84,7 @@ def modify_user_profile():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
     
-@admin_api.route("/delete_user_profile", methods=["POST"])
+@system_api.route("/delete_user_profile", methods=["POST"])
 @login_required
 def delete_user_profile():
     try:
@@ -110,7 +110,7 @@ def delete_user_profile():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
     
-@admin_api.route("/modify_role", methods=["POST"])
+@system_api.route("/modify_role", methods=["POST"])
 @login_required
 def modify_role():
     try:
@@ -134,7 +134,7 @@ def modify_role():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
     
-@admin_api.route("/delete_role", methods=["POST"])
+@system_api.route("/delete_role", methods=["POST"])
 @login_required
 def delete_role():
     try:
@@ -157,7 +157,7 @@ def delete_role():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
     
-@admin_api.route("/add_role", methods=["POST"])
+@system_api.route("/add_role", methods=["POST"])
 @login_required
 def add_role():
     try:
@@ -192,7 +192,7 @@ def add_role():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
     
-@admin_api.route("/get_customers", methods=["GET"])
+@system_api.route("/get_customers", methods=["GET"])
 @login_required
 def get_customers():
     try:
@@ -213,7 +213,7 @@ def get_customers():
     except Exception as e:
         return jsonify({"error": str(e)}), 500    
     
-@admin_api.route("/modify_customer", methods=["POST"])
+@system_api.route("/modify_customer", methods=["POST"])
 @login_required
 def modify_customer():
     try:
@@ -237,7 +237,7 @@ def modify_customer():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
     
-@admin_api.route("/delete_customer", methods=["POST"])
+@system_api.route("/delete_customer", methods=["POST"])
 @login_required
 def delete_customer():
     try:
@@ -260,7 +260,7 @@ def delete_customer():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
     
-@admin_api.route("/add_customer", methods=["POST"])
+@system_api.route("/add_customer", methods=["POST"])
 @login_required
 def add_customer():
     try:
@@ -295,7 +295,7 @@ def add_customer():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
     
-@admin_api.route("/get_products", methods=["GET"])
+@system_api.route("/get_products", methods=["GET"])
 @login_required
 def get_products():
     try:
@@ -316,7 +316,7 @@ def get_products():
     except Exception as e:
         return jsonify({"error": str(e)}), 500  
 
-@admin_api.route("/modify_product", methods=["POST"])
+@system_api.route("/modify_product", methods=["POST"])
 @login_required
 def modify_product():
     try:
@@ -340,7 +340,7 @@ def modify_product():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
     
-@admin_api.route("/delete_product", methods=["POST"])
+@system_api.route("/delete_product", methods=["POST"])
 @login_required
 def delete_product():
     try:
@@ -363,7 +363,7 @@ def delete_product():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
     
-@admin_api.route("/add_product", methods=["POST"])
+@system_api.route("/add_product", methods=["POST"])
 @login_required
 def add_product():
     try:

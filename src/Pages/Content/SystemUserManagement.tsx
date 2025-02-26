@@ -1,7 +1,7 @@
 import { Avatar, Button, Card, Flex, message, Table, TableProps } from 'antd'
 import { ReloadOutlined, UserOutlined } from '@ant-design/icons';
 import React, { useEffect, useState } from 'react'
-import { get_roles, get_user_list } from '../../Api/AdminApi';
+import { get_roles, get_user_list } from '../../Api/SystemApi';
 import { Role, User } from '../../../types';
 import RoleTag from '../../Component/RoleTag';
 import ModifyUserBtn from '../../Component/System/ModifyUserBtn';

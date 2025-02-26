@@ -2,7 +2,7 @@ import { Button, Modal, Form, Input, Flex, InputNumber, ColorPicker, message } f
 import { EditOutlined, SafetyOutlined } from '@ant-design/icons';
 import React, { useState } from 'react'
 import { Role } from '../../../types';
-import { modify_role } from '../../Api/AdminApi';
+import { modify_role } from '../../Api/SystemApi';
 
 interface ModifyRoleBtnProps {
     data: Role;
