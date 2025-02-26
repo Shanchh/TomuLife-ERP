@@ -1,9 +1,11 @@
-import { Button, Card, Col, DatePicker, Flex, Form, Input, message, Row, Select, Spin } from 'antd';
+import { Button, Card, Col, DatePicker, Flex, Form, Input, message, Row, Select, Spin, Typography } from 'antd';
 import React, { useEffect, useState, useMemo } from 'react';
 import { Product } from '../../../types';
 import { get_products } from '../../Api/SystemApi';
 import { purchase_orders } from "../../Api/FinanceApi";
 import { useNavigate } from "react-router-dom";
+
+const { Title, Text } = Typography;
 
 const PurchaseReportForm = () => {
     const [form] = Form.useForm();
@@ -133,6 +135,7 @@ const PurchaseReportForm = () => {
 
     return (
         <Spin spinning={isLoading}>
+            <Title level={3} style={{marginTop:0, marginBottom: 20}}>📦 新增進貨訂單</Title>
             <Form size={"small"} form={form} layout="vertical" onFinish={handleSubmit}>
                 <Card style={{ padding: "16px 0", marginBottom: 16, borderRadius: 8 }}>
                     <Row gutter={24}>
