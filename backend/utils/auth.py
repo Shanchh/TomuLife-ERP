@@ -1,6 +1,7 @@
 from flask import request, jsonify, g
 from functools import wraps
 from utils.firebase_config import auth
+from config.setting import db
 from firebase_admin._user_mgt import UserRecord
 
 def getTokenWithHeaders():
@@ -40,3 +41,21 @@ def auth_check():
             return func(*args, **kwargs)
         return view
     return wrapper
+
+def admin_required(f):
+    """管理員權限檢查裝飾器"""
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        email = g.curUser.email
+        if not email:
+            return jsonify({"error": "未提供 Email"}), 403
+
+        user = db["Users"].find_one({"email": email})
+
+        adminList = ["admin"]
+        if not user or user["role"] not in adminList:
+            return jsonify({"error": "無管理員權限"}), 403
+
+        return f(*args, **kwargs)
+
+    return decorated_function

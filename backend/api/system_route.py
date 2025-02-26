@@ -3,27 +3,18 @@ from config.setting import db
 from bson import ObjectId
 import time
 
-from utils.auth import login_required
+from utils.auth import login_required, admin_required
 from utils.tools import pop_objectId
 from utils.user import get_user_with_uid
 import utils.firebase_config
 
 system_api = Blueprint("system_api", __name__)
-
-def check_admin(email):
-    adminList = ["admin"]
-    collection = db["Users"]
-    user = collection.find_one({"email": email})
-
-    if user["role"] not in adminList:
-        raise PermissionError("No administrator privileges")
     
 @system_api.route("/get_roles", methods=["GET"])
 @login_required
+@admin_required
 def get_roles():
     try:
-        check_admin(g.curUser.email)
-
         collection = db["Roles"]
         role_list = list(collection.find())
 
@@ -34,17 +25,14 @@ def get_roles():
         }
 
         return jsonify(result), 200
-    except PermissionError as e:
-        return jsonify({"error": str(e)}), 403
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
 @system_api.route("/get_user_list", methods=["GET"])
 @login_required
+@admin_required
 def get_user_list():
     try:
-        check_admin(g.curUser.email)
-
         collection = db["Users"]
         user_list = list(collection.find())
 
@@ -55,17 +43,14 @@ def get_user_list():
         }
 
         return jsonify(result), 200
-    except PermissionError as e:
-        return jsonify({"error": str(e)}), 403
     except Exception as e:
         return jsonify({"error": str(e)}), 500
     
 @system_api.route("/modify_user_profile", methods=["POST"])
 @login_required
+@admin_required
 def modify_user_profile():
     try:
-        check_admin(g.curUser.email)
-        
         data: dict = request.get_json()
         uid = data["uid"]
         data = data["data"]
@@ -79,17 +64,14 @@ def modify_user_profile():
         }
 
         return jsonify(result), 200
-    except PermissionError as e:
-        return jsonify({"error": str(e)}), 403
     except Exception as e:
         return jsonify({"error": str(e)}), 500
     
 @system_api.route("/delete_user_profile", methods=["POST"])
 @login_required
+@admin_required
 def delete_user_profile():
     try:
-        check_admin(g.curUser.email)
-        
         data: dict = request.get_json()
         email = data["email"]
 
@@ -105,17 +87,14 @@ def delete_user_profile():
         }
 
         return jsonify(result), 200
-    except PermissionError as e:
-        return jsonify({"error": str(e)}), 403
     except Exception as e:
         return jsonify({"error": str(e)}), 500
     
 @system_api.route("/modify_role", methods=["POST"])
 @login_required
+@admin_required
 def modify_role():
     try:
-        check_admin(g.curUser.email)
-        
         data: dict = request.get_json()
         uid = data["uid"]
         values = data["values"]
@@ -129,17 +108,14 @@ def modify_role():
         }
 
         return jsonify(result), 200
-    except PermissionError as e:
-        return jsonify({"error": str(e)}), 403
     except Exception as e:
         return jsonify({"error": str(e)}), 500
     
 @system_api.route("/delete_role", methods=["POST"])
 @login_required
+@admin_required
 def delete_role():
     try:
-        check_admin(g.curUser.email)
-        
         data: dict = request.get_json()
         uid = data["uid"]
 
@@ -152,17 +128,14 @@ def delete_role():
         }
 
         return jsonify(result), 200
-    except PermissionError as e:
-        return jsonify({"error": str(e)}), 403
     except Exception as e:
         return jsonify({"error": str(e)}), 500
     
 @system_api.route("/add_role", methods=["POST"])
 @login_required
+@admin_required
 def add_role():
     try:
-        check_admin(g.curUser.email)
-        
         data: dict = request.get_json()
         values = data["values"]
 
@@ -187,17 +160,14 @@ def add_role():
         }
 
         return jsonify(result), 200
-    except PermissionError as e:
-        return jsonify({"error": str(e)}), 403
     except Exception as e:
         return jsonify({"error": str(e)}), 500
     
 @system_api.route("/get_customers", methods=["GET"])
 @login_required
+@admin_required
 def get_customers():
     try:
-        check_admin(g.curUser.email)
-
         collection = db["Customers"]
         customer_list = list(collection.find())
 
@@ -208,17 +178,14 @@ def get_customers():
         }
 
         return jsonify(result), 200
-    except PermissionError as e:
-        return jsonify({"error": str(e)}), 403
     except Exception as e:
         return jsonify({"error": str(e)}), 500    
     
 @system_api.route("/modify_customer", methods=["POST"])
 @login_required
+@admin_required
 def modify_customer():
     try:
-        check_admin(g.curUser.email)
-        
         data: dict = request.get_json()
         uid = data["uid"]
         values = data["values"]
@@ -232,17 +199,14 @@ def modify_customer():
         }
 
         return jsonify(result), 200
-    except PermissionError as e:
-        return jsonify({"error": str(e)}), 403
     except Exception as e:
         return jsonify({"error": str(e)}), 500
     
 @system_api.route("/delete_customer", methods=["POST"])
 @login_required
+@admin_required
 def delete_customer():
     try:
-        check_admin(g.curUser.email)
-        
         data: dict = request.get_json()
         uid = data["uid"]
 
@@ -255,17 +219,14 @@ def delete_customer():
         }
 
         return jsonify(result), 200
-    except PermissionError as e:
-        return jsonify({"error": str(e)}), 403
     except Exception as e:
         return jsonify({"error": str(e)}), 500
     
 @system_api.route("/add_customer", methods=["POST"])
 @login_required
+@admin_required
 def add_customer():
     try:
-        check_admin(g.curUser.email)
-        
         data: dict = request.get_json()
         values = data["values"]
 
@@ -290,17 +251,14 @@ def add_customer():
         }
 
         return jsonify(result), 200
-    except PermissionError as e:
-        return jsonify({"error": str(e)}), 403
     except Exception as e:
         return jsonify({"error": str(e)}), 500
     
 @system_api.route("/get_products", methods=["GET"])
 @login_required
+@admin_required
 def get_products():
     try:
-        check_admin(g.curUser.email)
-
         collection = db["Products"]
         product_list = list(collection.find())
 
@@ -311,17 +269,14 @@ def get_products():
         }
 
         return jsonify(result), 200
-    except PermissionError as e:
-        return jsonify({"error": str(e)}), 403
     except Exception as e:
         return jsonify({"error": str(e)}), 500  
 
 @system_api.route("/modify_product", methods=["POST"])
 @login_required
+@admin_required
 def modify_product():
     try:
-        check_admin(g.curUser.email)
-        
         data: dict = request.get_json()
         uid = data["uid"]
         values = data["values"]
@@ -335,17 +290,14 @@ def modify_product():
         }
 
         return jsonify(result), 200
-    except PermissionError as e:
-        return jsonify({"error": str(e)}), 403
     except Exception as e:
         return jsonify({"error": str(e)}), 500
     
 @system_api.route("/delete_product", methods=["POST"])
 @login_required
+@admin_required
 def delete_product():
     try:
-        check_admin(g.curUser.email)
-        
         data: dict = request.get_json()
         uid = data["uid"]
 
@@ -358,17 +310,14 @@ def delete_product():
         }
 
         return jsonify(result), 200
-    except PermissionError as e:
-        return jsonify({"error": str(e)}), 403
     except Exception as e:
         return jsonify({"error": str(e)}), 500
     
 @system_api.route("/add_product", methods=["POST"])
 @login_required
+@admin_required
 def add_product():
     try:
-        check_admin(g.curUser.email)
-        
         data: dict = request.get_json()
         values = data["values"]
 
@@ -393,7 +342,5 @@ def add_product():
         }
 
         return jsonify(result), 200
-    except PermissionError as e:
-        return jsonify({"error": str(e)}), 403
     except Exception as e:
         return jsonify({"error": str(e)}), 500
