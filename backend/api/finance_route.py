@@ -26,7 +26,7 @@ def purchase_orders():
         if missing_fields:
             return jsonify({"error": f"Missing required fields: {', '.join(missing_fields)}"}), 400
 
-        product_details = []
+        product_details = {}
         countAmount = 0
 
         # 建構產品資料
@@ -44,14 +44,14 @@ def purchase_orders():
 
             item_amount = (cost_per_bottle * quantity_bottles) + (cost_per_box * quantity_boxes)
 
-            product_details.append({
+            product_details[product_id] = {
                 "productID": product_id,
                 "costPerBottle": cost_per_bottle,
                 "purchaseQuantityBottles": quantity_bottles,
                 "costPerBox": cost_per_box,
                 "purchaseQuantityBoxes": quantity_boxes,
                 "itemAmount": item_amount
-            })
+            }
 
             countAmount += item_amount
 

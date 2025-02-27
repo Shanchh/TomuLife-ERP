@@ -69,7 +69,7 @@ export interface PurchaseProduct {
 export interface PurchaseOrder {
     _id: string;
     purchaseAt: number;
-    products: PurchaseProduct[];
+    products: { [productID: string]: PurchaseProduct };
     totalAmount: number;
     remarks: string;
     creator: {

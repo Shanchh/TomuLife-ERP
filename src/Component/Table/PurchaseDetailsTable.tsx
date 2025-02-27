@@ -24,9 +24,14 @@ const PurchaseDetailsTable: React.FC<PurchaseDetailsTableProps> = ({ isLoading, 
             title: "品項數",
             align: "center",
             dataIndex: "products",
-            render: (data: PurchaseProduct[]) => (
-                <span style={{ color: token.colorPrimary, fontWeight: "bold" }}>{data.length}</span>
-            ),
+            render: (products: { [productId: string]: PurchaseProduct }) => {
+                const productCount = Object.keys(products).length;
+                return (
+                    <span style={{ color: token.colorPrimary, fontWeight: "bold" }}>
+                        {productCount}
+                    </span>
+                );
+            },
         },
         {
             title: "進貨商品明細",
