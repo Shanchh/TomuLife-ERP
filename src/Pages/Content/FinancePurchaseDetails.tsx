@@ -134,7 +134,7 @@ const FinancePurchaseDetails = () => {
           data={filteredData}
         />
       ) : (
-        <PurchaseDetailsTable isLoading={isLoading} data={filteredData} />
+        <PurchaseDetailsTable isLoading={isLoading} data={filteredData} productList={productList}/>
       )}
     </Card>
   );

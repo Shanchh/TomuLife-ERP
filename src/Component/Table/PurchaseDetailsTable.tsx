@@ -1,14 +1,16 @@
 import React, { useState } from 'react'
-import { PurchaseOrder, PurchaseProduct } from "../../../types";
+import { Product, PurchaseOrder, PurchaseProduct } from "../../../types";
 import { Button, Flex, Table, TableProps, theme, Tooltip } from "antd";
-import { DeleteOutlined, EditOutlined, FileTextOutlined } from "@ant-design/icons";
+import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
+import PurchaseOrderDescriptionsBtn from "../Button/PurchaseOrderDescriptionsBtn";
 
 interface PurchaseDetailsTableProps {
     isLoading: boolean;
     data: PurchaseOrder[];
+    productList: Product[];
 }
 
-const PurchaseDetailsTable: React.FC<PurchaseDetailsTableProps> = ({ isLoading, data }) => {
+const PurchaseDetailsTable: React.FC<PurchaseDetailsTableProps> = ({ isLoading, data, productList }) => {
     const { token } = theme.useToken();
 
     const [pageSize, setPageSize] = useState(10);
@@ -37,11 +39,7 @@ const PurchaseDetailsTable: React.FC<PurchaseDetailsTableProps> = ({ isLoading, 
             title: "進貨商品明細",
             align: "center",
             render: (data: PurchaseOrder) => (
-                <Tooltip title="商品明細">
-                    <Button variant="link" color="default">
-                        <FileTextOutlined />
-                    </Button>
-                </Tooltip>
+                <PurchaseOrderDescriptionsBtn data={data} productList={productList}/>
             ),
         },
         {
