@@ -68,6 +68,10 @@ const FinancePurchaseDetails = () => {
     setSelectedProductId(null);
   };
 
+  const handleDelete = (id: string) => {
+    setFilteredData(filteredData.filter(data => data._id !== id));
+  };
+
   return (
     <Card style={{ overflow: "hidden", height: "100%" }}>
       <Form
@@ -132,9 +136,10 @@ const FinancePurchaseDetails = () => {
           productName={productList.find((product) => product._id === selectedProductId)?.productName || ""}
           isLoading={isLoading}
           data={filteredData}
+          handleDelete={handleDelete}
         />
       ) : (
-        <PurchaseDetailsTable isLoading={isLoading} data={filteredData} productList={productList}/>
+        <PurchaseDetailsTable isLoading={isLoading} data={filteredData} productList={productList} handleDelete={handleDelete}/>
       )}
     </Card>
   );

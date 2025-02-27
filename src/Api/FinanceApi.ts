@@ -17,3 +17,13 @@ export const get_purchase_orders = async () => {
         throw err;
     }
 };
+
+export const delete_purchase_orders = async (uid: string) => {
+    try {
+        const res = await axios.post("/finance/delete_purchase_orders", { uid });
+        return res.data;
+    }
+    catch (err) {
+        throw err;
+    }
+}

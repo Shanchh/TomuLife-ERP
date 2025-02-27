@@ -3,14 +3,16 @@ import { Product, PurchaseOrder, PurchaseProduct } from "../../../types";
 import { Button, Flex, Table, TableProps, theme, Tooltip } from "antd";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import PurchaseOrderDescriptionsBtn from "../Button/PurchaseOrderDescriptionsBtn";
+import DeleteItemBtn from "../System/DeleteItemBtn";
 
 interface PurchaseDetailsTableProps {
     isLoading: boolean;
     data: PurchaseOrder[];
     productList: Product[];
+    handleDelete: (id: string) => void;
 }
 
-const PurchaseDetailsTable: React.FC<PurchaseDetailsTableProps> = ({ isLoading, data, productList }) => {
+const PurchaseDetailsTable: React.FC<PurchaseDetailsTableProps> = ({ isLoading, data, productList, handleDelete }) => {
     const { token } = theme.useToken();
 
     const [pageSize, setPageSize] = useState(10);
@@ -74,9 +76,7 @@ const PurchaseDetailsTable: React.FC<PurchaseDetailsTableProps> = ({ isLoading, 
                     </Tooltip>
 
                     <Tooltip title="刪除進貨明細">
-                        <Button variant="link" color="danger">
-                            <DeleteOutlined />
-                        </Button>
+                        <DeleteItemBtn type="purchase_orders" data={data} handleDelete={handleDelete} />
                     </Tooltip>
                 </Flex>
             )

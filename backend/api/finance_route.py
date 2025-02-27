@@ -98,3 +98,23 @@ def get_purchase_orders():
         return jsonify(result), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+    
+@finance_api.route("/delete_purchase_orders", methods=["POST"])
+@login_required
+@admin_required
+def delete_purchase_orders():
+    try:
+        data: dict = request.get_json()
+        uid = data["uid"]
+
+        collection = db["PurchaseOrders"]
+        r = collection.delete_one({"_id": ObjectId(uid)})
+
+        result = {
+            "code": 0,
+            "delete_count": r.deleted_count
+        }
+
+        return jsonify(result), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500

@@ -2,15 +2,17 @@ import React, { useState } from 'react'
 import { PurchaseOrder, PurchaseProduct } from "../../../types";
 import { Button, Flex, Table, TableProps, theme, Tooltip } from "antd";
 import { DeleteOutlined, EditOutlined, FileTextOutlined } from "@ant-design/icons";
+import DeleteItemBtn from "../System/DeleteItemBtn";
 
 interface SeletcPurchaseDetailsTableProps {
     productId: string;
     productName: string;
     isLoading: boolean;
     data: PurchaseOrder[];
+    handleDelete: (id: string) => void;
 }
 
-const SelectPurchaseDetailsTable: React.FC<SeletcPurchaseDetailsTableProps> = ({ productId, productName, isLoading, data }) => {
+const SelectPurchaseDetailsTable: React.FC<SeletcPurchaseDetailsTableProps> = ({ productId, productName, isLoading, data, handleDelete }) => {
     const { token } = theme.useToken();
 
     const [pageSize, setPageSize] = useState(10);
@@ -101,9 +103,7 @@ const SelectPurchaseDetailsTable: React.FC<SeletcPurchaseDetailsTableProps> = ({
                     </Tooltip>
 
                     <Tooltip title="刪除進貨明細">
-                        <Button variant="link" color="danger">
-                            <DeleteOutlined />
-                        </Button>
+                        <DeleteItemBtn type="purchase_orders" data={data} handleDelete={handleDelete} />
                     </Tooltip>
                 </Flex>
             )
