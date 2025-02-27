@@ -108,6 +108,7 @@ const PurchaseOrderDescriptionsBtn: React.FC<PurchaseOrderDescriptionsBtnProps> 
                     size="small"
                     style={{ marginTop: 16 }}
                 />
+                <span style={{ color: "#999", fontSize: 12 }}>資料創建時間: {new Date(data.createdAt * 1000).toLocaleString()}</span>
             </Modal>
         </Tooltip>
     );
