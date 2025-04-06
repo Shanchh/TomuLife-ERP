@@ -4,15 +4,17 @@ import { Button, Flex, Table, TableProps, theme, Tooltip } from "antd";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import PurchaseOrderDescriptionsBtn from "../Button/PurchaseOrderDescriptionsBtn";
 import DeleteItemBtn from "../System/DeleteItemBtn";
+import ModifyPruchaseOrderBtn from '../Button/ModifyPruchaseOrderBtn';
 
 interface PurchaseDetailsTableProps {
     isLoading: boolean;
     data: PurchaseOrder[];
     productList: Product[];
     handleDelete: (id: string) => void;
+    refreshData: () => void;
 }
 
-const PurchaseDetailsTable: React.FC<PurchaseDetailsTableProps> = ({ isLoading, data, productList, handleDelete }) => {
+const PurchaseDetailsTable: React.FC<PurchaseDetailsTableProps> = ({ isLoading, data, productList, handleDelete, refreshData }) => {
     const { token } = theme.useToken();
 
     const [pageSize, setPageSize] = useState(10);
@@ -41,7 +43,7 @@ const PurchaseDetailsTable: React.FC<PurchaseDetailsTableProps> = ({ isLoading, 
             title: "進貨商品明細",
             align: "center",
             render: (data: PurchaseOrder) => (
-                <PurchaseOrderDescriptionsBtn data={data} productList={productList}/>
+                <PurchaseOrderDescriptionsBtn data={data} productList={productList} />
             ),
         },
         {
@@ -70,9 +72,7 @@ const PurchaseDetailsTable: React.FC<PurchaseDetailsTableProps> = ({ isLoading, 
             render: (data: PurchaseOrder) => (
                 <Flex gap={10} justify="center" align="center">
                     <Tooltip title="編輯進貨明細">
-                        <Button variant="link" color="default">
-                            <EditOutlined />
-                        </Button>
+                        <ModifyPruchaseOrderBtn initialData={data} refreshData={refreshData}/>
                     </Tooltip>
 
                     <Tooltip title="刪除進貨明細">

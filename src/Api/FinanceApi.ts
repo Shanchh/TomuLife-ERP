@@ -27,3 +27,12 @@ export const delete_purchase_orders = async (uid: string) => {
         throw err;
     }
 }
+
+export const update_purchase_orders = async (dataId: string, purchaseDate: number, products: any, totalAmount: number, remarks: string) => {
+    try {
+        const res = await axios.post("/finance/update_purchase_orders", { dataId, purchaseDate, products, totalAmount, remarks });
+        return res.data;
+    } catch (err) {
+        throw err;
+    }
+};

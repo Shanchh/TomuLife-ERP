@@ -3,6 +3,7 @@ import { PurchaseOrder, PurchaseProduct } from "../../../types";
 import { Button, Flex, Table, TableProps, theme, Tooltip } from "antd";
 import { DeleteOutlined, EditOutlined, FileTextOutlined } from "@ant-design/icons";
 import DeleteItemBtn from "../System/DeleteItemBtn";
+import ModifyPruchaseOrderBtn from '../Button/ModifyPruchaseOrderBtn';
 
 interface SeletcPurchaseDetailsTableProps {
     productId: string;
@@ -10,9 +11,10 @@ interface SeletcPurchaseDetailsTableProps {
     isLoading: boolean;
     data: PurchaseOrder[];
     handleDelete: (id: string) => void;
+    refreshData: () => void;
 }
 
-const SelectPurchaseDetailsTable: React.FC<SeletcPurchaseDetailsTableProps> = ({ productId, productName, isLoading, data, handleDelete }) => {
+const SelectPurchaseDetailsTable: React.FC<SeletcPurchaseDetailsTableProps> = ({ productId, productName, isLoading, data, handleDelete, refreshData }) => {
     const { token } = theme.useToken();
 
     const [pageSize, setPageSize] = useState(10);
@@ -97,9 +99,7 @@ const SelectPurchaseDetailsTable: React.FC<SeletcPurchaseDetailsTableProps> = ({
             render: (data: PurchaseOrder) => (
                 <Flex gap={10} justify="center" align="center">
                     <Tooltip title="編輯進貨明細">
-                        <Button variant="link" color="default">
-                            <EditOutlined />
-                        </Button>
+                        <ModifyPruchaseOrderBtn initialData={data} refreshData={refreshData}/>
                     </Tooltip>
 
                     <Tooltip title="刪除進貨明細">

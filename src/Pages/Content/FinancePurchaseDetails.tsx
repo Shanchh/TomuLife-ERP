@@ -137,9 +137,15 @@ const FinancePurchaseDetails = () => {
           isLoading={isLoading}
           data={filteredData}
           handleDelete={handleDelete}
+          refreshData={refreshData}
         />
       ) : (
-        <PurchaseDetailsTable isLoading={isLoading} data={filteredData} productList={productList} handleDelete={handleDelete}/>
+        <PurchaseDetailsTable
+          isLoading={isLoading}
+          data={filteredData}
+          productList={productList}
+          handleDelete={handleDelete}
+          refreshData={refreshData} />
       )}
     </Card>
   );

@@ -1,13 +1,20 @@
 import { Button, Card, Col, DatePicker, Flex, Form, Input, message, Row, Select, Spin, Typography } from 'antd';
 import React, { useEffect, useState, useMemo } from 'react';
-import { Product } from '../../../types';
+import { Product, PurchaseOrder } from '../../../types';
 import { get_products } from '../../Api/SystemApi';
-import { purchase_orders } from "../../Api/FinanceApi";
-import { useNavigate } from "react-router-dom";
+import { purchase_orders, update_purchase_orders } from '../../Api/FinanceApi';
+import { useNavigate } from 'react-router-dom';
+import dayjs from 'dayjs';
 
-const { Title, Text } = Typography;
+const { Title } = Typography;
 
-const PurchaseReportForm = () => {
+interface PurchaseReportFormProps {
+    initialData?: PurchaseOrder;
+    setModalOpen?: (open: boolean) => void;
+    refreshData?: () => void;
+}
+
+const PurchaseReportForm: React.FC<PurchaseReportFormProps> = ({ initialData, setModalOpen, refreshData }) => {
     const [form] = Form.useForm();
     const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -23,6 +30,36 @@ const PurchaseReportForm = () => {
             .then((value: Product[]) => setProductList(value))
             .finally(() => setIsLoading(false));
     }, []);
+
+    useEffect(() => {
+        if (!initialData || productList.length === 0) return;
+
+        const products = productList.filter(p => Object.keys(initialData.products).includes(p._id));
+        setSelectedProducts(products);
+
+        const newAmounts: { [key: string]: number } = {};
+        const formProducts = products.map((product) => {
+            const orderProduct = initialData.products[product._id];
+            const bottleAmount = (product.costPerBottle ?? 0) * orderProduct.purchaseQuantityBottles;
+            const boxAmount = (product.costPerBox ?? 0) * orderProduct.purchaseQuantityBoxes;
+            const total = bottleAmount + boxAmount;
+            newAmounts[product._id] = total;
+
+            return {
+                purchaseQuantityBottles: orderProduct.purchaseQuantityBottles,
+                purchaseQuantityBoxes: orderProduct.purchaseQuantityBoxes,
+                purchaseAmount: total,
+            };
+        });
+
+        setAmounts(newAmounts);
+
+        form.setFieldsValue({
+            purchaseDate: dayjs(initialData.purchaseAt * 1000),
+            products: formProducts,
+            remarks: initialData.remarks || '',
+        });
+    }, [initialData, productList]);
 
     const handleAddProduct = () => {
         if (!selectedProductId) return;
@@ -64,7 +101,6 @@ const PurchaseReportForm = () => {
             form.setFieldsValue({ products: updatedProducts });
         }
     };
-
 
     const handleCalculateAmount = (index: number, product: Product) => {
         const values = form.getFieldsValue();
@@ -119,23 +155,34 @@ const PurchaseReportForm = () => {
         }
 
         const timestamp = new Date(values.purchaseDate).getTime() / 1000;
+
         try {
-            await purchase_orders(timestamp, transformedData, totalAmount, values.remarks || "");
-            message.success("成功創建進貨訂單");
+            if (initialData?._id) {
+                // 編輯模式
+                await update_purchase_orders(initialData._id, timestamp, transformedData, totalAmount, values.remarks || "");
+                setModalOpen?.(false);
+                message.success("成功更新進貨訂單");
+                refreshData?.();
+            } else {
+                // 新增模式
+                await purchase_orders(timestamp, transformedData, totalAmount, values.remarks || "");
+                message.success("成功創建進貨訂單");
+            }
+
             form.resetFields();
             navigate("/finance/purchase-management/details");
-        }
-        catch {
-            message.error("創建進貨訂單發生錯誤！");
-        }
-        finally {
+        } catch {
+            message.error("進貨訂單處理時發生錯誤！");
+        } finally {
             setIsSubmitLoading(false);
         }
-    };    
+    };
 
     return (
         <Spin spinning={isLoading}>
-            <Title level={3} style={{marginTop:0, marginBottom: 20}}>📦 新增進貨訂單</Title>
+            <Title level={3} style={{ marginTop: 0, marginBottom: 20 }}>
+                📦 {initialData ? "編輯進貨訂單" : "新增進貨訂單"}
+            </Title>
             <Form size={"small"} form={form} layout="vertical" onFinish={handleSubmit}>
                 <Card style={{ padding: "16px 0", marginBottom: 16, borderRadius: 8 }}>
                     <Row gutter={24}>
@@ -225,15 +272,8 @@ const PurchaseReportForm = () => {
                 ))}
 
                 <Card style={{ marginTop: 20 }}>
-                    <Form.Item
-                        label="進貨備註說明"
-                        name="remarks"
-                    >
-                        <Input.TextArea
-                            placeholder="備註內容"
-                            rows={3}
-                            allowClear
-                        />
+                    <Form.Item label="進貨備註說明" name="remarks">
+                        <Input.TextArea placeholder="備註內容" rows={3} allowClear />
                     </Form.Item>
                 </Card>
 
@@ -242,7 +282,9 @@ const PurchaseReportForm = () => {
                         <span style={{ fontSize: 18, fontWeight: 'bold' }}>
                             總金額: ${totalAmount.toLocaleString()}
                         </span>
-                        <Button type="primary" htmlType="submit" loading={isSubmitLoading}>提交</Button>
+                        <Button type="primary" htmlType="submit" loading={isSubmitLoading}>
+                            {initialData ? "更新" : "提交"}
+                        </Button>
                     </Flex>
                 </Card>
             </Form>
@@ -250,4 +292,4 @@ const PurchaseReportForm = () => {
     );
 };
 
-export default PurchaseReportForm;
+export default PurchaseReportForm;  
