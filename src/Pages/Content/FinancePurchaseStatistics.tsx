@@ -72,6 +72,7 @@ const FinancePurchaseStatistics = () => {
 
         <Table
           dataSource={statisticsData?.productStats}
+          rowKey={(record) => record.productID}
           columns={[
             { title: '商品名稱', dataIndex: 'productName' },
             { title: '採購次數', dataIndex: 'count' },
