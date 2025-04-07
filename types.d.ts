@@ -79,3 +79,21 @@ export interface PurchaseOrder {
     };
     createdAt: number;
 }
+
+export interface PurchaseStatisticsItem {
+    productID: string;
+    productName: string;
+    count: number;
+    boxes: number;
+    bottles: number;
+    subtotal: number;
+}
+
+export interface PurchaseStatistics {
+    year: number;
+    totalAmount: number;
+    totalBoxes: number;
+    totalBottles: number;
+    ordersCount: number;
+    productStats: PurchaseStatisticsItem[];
+}

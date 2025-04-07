@@ -36,3 +36,12 @@ export const update_purchase_orders = async (dataId: string, purchaseDate: numbe
         throw err;
     }
 };
+
+export const get_purchase_statistics = async (year: number) => {
+    try {
+        const res = await axios.post("/finance/get_purchase_statistics", { year });
+        return res.data;
+    } catch (err) {
+        throw err;
+    }
+};

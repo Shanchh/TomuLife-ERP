@@ -2,6 +2,7 @@ from flask import Blueprint, request, jsonify, g
 from config.setting import db
 from bson import ObjectId
 import time
+from datetime import datetime
 
 from utils.auth import login_required, admin_required
 from utils.tools import pop_objectId
@@ -195,5 +196,69 @@ def delete_purchase_orders():
         }
 
         return jsonify(result), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+    
+@finance_api.route("/get_purchase_statistics", methods=["POST"])
+@login_required
+@admin_required
+def get_purchase_statistics():
+    try:
+        data = request.get_json()
+        year = int(data["year"])
+
+        # 取得該年的開始結束 timestamp
+        start_timestamp = int(datetime(year, 1, 1).timestamp())
+        end_timestamp = int(datetime(year + 1, 1, 1).timestamp())
+
+        # 查詢該年份內的進貨訂單
+        orders = list(db["PurchaseOrders"].find({
+            "purchaseAt": {
+                "$gte": start_timestamp,
+                "$lt": end_timestamp
+            }
+        }))
+
+        product_stats = {}
+        total_bottles = 0
+        total_boxes = 0
+        total_amount = 0
+
+        for order in orders:
+            total_amount += order.get("totalAmount", 0)
+
+            for pid, prod in order.get("products", {}).items():
+                if pid not in product_stats:
+                    product_stats[pid] = {
+                        "productID": pid,
+                        "bottles": 0,
+                        "boxes": 0,
+                        "subtotal": 0,
+                        "count": 0
+                    }
+
+                product_stats[pid]["bottles"] += prod.get("purchaseQuantityBottles", 0)
+                product_stats[pid]["boxes"] += prod.get("purchaseQuantityBoxes", 0)
+                product_stats[pid]["subtotal"] += prod.get("itemAmount", 0)
+                product_stats[pid]["count"] += 1
+
+                total_bottles += prod.get("purchaseQuantityBottles", 0)
+                total_boxes += prod.get("purchaseQuantityBoxes", 0)
+
+        products = db["Products"].find({"_id": {"$in": [ObjectId(pid) for pid in product_stats.keys()]}})
+        product_name_map = {str(p["_id"]): p["productName"] for p in products}
+
+        for pid in product_stats:
+            product_stats[pid]["productName"] = product_name_map.get(pid, pid)
+
+        return jsonify({
+            "year": year,
+            "ordersCount": len(orders),
+            "totalAmount": total_amount,
+            "totalBottles": total_bottles,
+            "totalBoxes": total_boxes,
+            "productStats": list(product_stats.values())
+        }), 200
+
     except Exception as e:
         return jsonify({"error": str(e)}), 500
