@@ -72,34 +72,34 @@ const PurchaseReportForm: React.FC<PurchaseReportFormProps> = ({ initialData, se
     };
 
     const handleRemoveProduct = (productId: string) => {
-        setSelectedProducts(prev => {
-            const updatedProducts = prev.filter(p => p._id !== productId);
+        // 移除產品
+        const updatedProducts = selectedProducts.filter(p => p._id !== productId);
+        setSelectedProducts(updatedProducts);
 
-            const newProductData = updatedProducts.map((product, idx) => ({
-                purchaseQuantityBottles: form.getFieldValue(["products", idx, "purchaseQuantityBottles"]) || 0,
-                purchaseQuantityBoxes: form.getFieldValue(["products", idx, "purchaseQuantityBoxes"]) || 0,
-            }));
-
-            form.setFieldsValue({
-                products: newProductData
-            });
-
-            return updatedProducts;
-        });
-
+        // 更新金額
         setAmounts(prev => {
             const updated = { ...prev };
             delete updated[productId];
             return updated;
         });
 
-        const values = form.getFieldsValue();
-        if (values.products) {
-            const updatedProducts = values.products.filter((_: any, index: number) =>
-                selectedProducts[index]._id !== productId
-            );
-            form.setFieldsValue({ products: updatedProducts });
-        }
+        // 重建 products 欄位資料
+        const currentFormValues = form.getFieldsValue();
+        const currentFormProducts = currentFormValues.products || [];
+
+        const rebuiltProductFields = updatedProducts.map((product) => {
+            const idx = selectedProducts.findIndex(p => p._id === product._id);
+            const productField = currentFormProducts[idx] || {};
+            return {
+                purchaseQuantityBottles: productField.purchaseQuantityBottles || 0,
+                purchaseQuantityBoxes: productField.purchaseQuantityBoxes || 0,
+                purchaseAmount: productField.purchaseAmount || 0,
+            };
+        });
+
+        form.setFieldsValue({
+            products: rebuiltProductFields
+        });
     };
 
     const handleCalculateAmount = (index: number, product: Product) => {
