@@ -1,5 +1,5 @@
 import { message, Spin, Typography, Form, Card, Row, Col, DatePicker, Select, Flex, Button, Input, Radio, Space, Divider } from 'antd';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { get_customers, get_products } from '../../Api/SystemApi';
 import { Customer, Product } from '../../../types';
 import { locations } from '../../Constants/locations';
@@ -9,6 +9,8 @@ const { Title } = Typography;
 
 const SalesReportForm = () => {
     const [form] = Form.useForm();
+    const watchedProducts = Form.useWatch(["productSection", "products"], form);
+
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [isSubmitLoading, setIsSubmitLoading] = useState<boolean>(false);
 
@@ -22,6 +24,7 @@ const SalesReportForm = () => {
     const [paymentStatus, setPaymentStatus] = useState<string>("unpaid");
     const [isTaxIncluded, setIsTaxIncluded] = useState<string | null>(null);
     const [paymentType, setPaymentType] = useState<string | null>(null);
+    const [deliveryMethod, setDeliveryMethod] = useState<string | null>(null);
 
     const fetchData = async () => {
         setIsLoading(true);
@@ -73,6 +76,19 @@ const SalesReportForm = () => {
         }
     };
 
+    const totalAmount = useMemo(() => {
+        if (!watchedProducts) return 0;
+        let total = 0;
+    
+        Object.values(watchedProducts).forEach((item: any) => {
+            const quantity = parseFloat(item?.quantity) || 0;
+            const price = parseFloat(item?.price) || 0;
+            total += quantity * price;
+        });
+    
+        return total;
+    }, [watchedProducts]);
+
     const handleSubmit = async () => {
         const values = form.getFieldsValue();
         console.log(values);
@@ -88,7 +104,7 @@ const SalesReportForm = () => {
                 <Card title="銷貨資訊" style={{ marginBottom: 16 }}>
                     <Form.Item
                         label="銷貨日期"
-                        name={"purchaseDate"}
+                        name={["basicInfo", "purchaseDate"]}
                         rules={[{ required: true }]}
                     >
                         <DatePicker style={{ width: "100%" }} />
@@ -97,8 +113,9 @@ const SalesReportForm = () => {
                         <Col xs={24} sm={24} md={12}>
                             <Form.Item
                                 label="縣市"
-                                name="areaCode"
+                                name={["basicInfo", "areaCode"]}
                                 rules={[{ required: true }]}
+                                initialValue={"all"}
                             >
                                 <Select
                                     showSearch
@@ -122,7 +139,7 @@ const SalesReportForm = () => {
                         <Col xs={24} sm={24} md={12}>
                             <Form.Item
                                 label="客戶"
-                                name="customer"
+                                name={["basicInfo", "customer"]}
                                 rules={[{ required: true }]}
                             >
                                 <Select
@@ -183,7 +200,7 @@ const SalesReportForm = () => {
                                 <Col xs={24} sm={12}>
                                     <Form.Item
                                         label="數量"
-                                        name={['products', product._id, 'quantity']}
+                                        name={["productSection", "products", product._id, "quantity"]}
                                         rules={[{ required: true, message: '請輸入數量' }]}
                                     >
                                         <Input type="number" min={0} placeholder="輸入數量" />
@@ -192,7 +209,7 @@ const SalesReportForm = () => {
                                 <Col xs={24} sm={12}>
                                     <Form.Item
                                         label="價格"
-                                        name={['products', product._id, 'price']}
+                                        name={["productSection", "products", product._id, "price"]}
                                         rules={[{ required: true, message: '請輸入價格' }]}
                                         initialValue={productList.find(p => p._id === product._id)?.retailPrice ?? 0}
                                     >
@@ -203,7 +220,7 @@ const SalesReportForm = () => {
                         </Card>
                     ))}
 
-                    <Form.Item label="價格備註說明" name="remarks">
+                    <Form.Item label="價格備註說明" name={["productSection", "remarks"]}>
                         <Input.TextArea placeholder="價格備註說明" rows={2} allowClear />
                     </Form.Item>
                 </Card>
@@ -214,7 +231,7 @@ const SalesReportForm = () => {
                         <Col xs={24} sm={24} md={12}>
                             <Form.Item
                                 label="付款狀態"
-                                name="paymentStatus"
+                                name={["billing", "paymentStatus"]}
                                 rules={[{ required: true, message: '請選擇付款狀態' }]}
                                 initialValue="unpaid"
                             >
@@ -232,7 +249,7 @@ const SalesReportForm = () => {
                             {paymentStatus !== "gift" && (
                                 <Form.Item
                                     label="金額是否含稅"
-                                    name="isTaxIncluded"
+                                    name={["billing", "isTaxIncluded"]}
                                     rules={[{ required: true, message: '請選擇是否含稅' }]}
                                 >
                                     <Radio.Group value={isTaxIncluded} onChange={(e) => setIsTaxIncluded(e.target.value)}>
@@ -251,7 +268,7 @@ const SalesReportForm = () => {
                             {paymentStatus !== "gift" && (
                                 <Form.Item
                                     label="應收金額"
-                                    name="receivableAmount"
+                                    name={["billing", "receivableAmount"]}
                                     rules={[{ required: true, message: '請填寫應收金額' }]}
                                     initialValue={0}
                                 >
@@ -264,7 +281,7 @@ const SalesReportForm = () => {
                             {paymentStatus !== "gift" && isTaxIncluded === "included" && (
                                 <Form.Item
                                     label="發票號碼"
-                                    name="invoiceNumber"
+                                    name={["billing", "invoiceNumber"]}
                                     rules={[{ required: true, message: '請填寫發票號碼' }]}
                                 >
                                     <Input placeholder="發票號碼" />
@@ -279,7 +296,7 @@ const SalesReportForm = () => {
 
                             <Form.Item
                                 label="收/匯款日"
-                                name={"paymentDate"}
+                                name={["billing", "paymentDate"]}
                                 rules={[{ required: true }]}
                             >
                                 <DatePicker style={{ width: "100%" }} />
@@ -288,7 +305,7 @@ const SalesReportForm = () => {
                                 <Col xs={24} sm={24} md={12}>
                                     <Form.Item
                                         label="收款方式"
-                                        name={"paymentType"}
+                                        name={["billing", "paymentType"]}
                                         rules={[{ required: true }]}
                                     >
                                         <Select
@@ -308,7 +325,7 @@ const SalesReportForm = () => {
                                     {["eSunBank", "yuantaBank"].includes(paymentType ?? '') && (
                                         <Form.Item
                                             label="匯款後五碼"
-                                            name="remitCode"
+                                            name={["billing", "remitCode"]}
                                             rules={[{ required: true, message: '請輸入匯款後五碼' }]}
                                         >
                                             <Input placeholder="輸入匯款後五碼" />
@@ -320,11 +337,47 @@ const SalesReportForm = () => {
                     )}
                 </Card>
 
+                {/* 配送區塊 */}
+                <Card title="運送資料" style={{ marginTop: 20 }}>
+                    <Row gutter={[16, 12]}>
+                        <Col xs={24} sm={24} md={12}>
+                            <Form.Item
+                                label="配送方式"
+                                name={["delivery", "deliveryMethod"]}
+                                rules={[{ required: true }]}
+                            >
+                                <Select
+                                    placeholder="請選擇配送方式"
+                                    style={{ width: "100%" }}
+                                    value={deliveryMethod}
+                                    onChange={(value) => setDeliveryMethod(value)}
+                                    options={[
+                                        { label: "自送", value: "selfDelivery" },
+                                        { label: "新竹貨運", value: "hsinchuLogistics" },
+                                    ]}
+                                />
+                            </Form.Item>
+                        </Col>
+                        <Col xs={24} sm={24} md={12}>
+                            {deliveryMethod === "hsinchuLogistics" && (
+                                <Form.Item
+                                    label="配送箱數"
+                                    name={["delivery", "deliveryBoxes"]}
+                                    rules={[{ required: true, message: '請輸入配送箱數' }]}
+                                    initialValue={0}
+                                >
+                                    <Input type="number" min={0} placeholder="輸入配送箱數" />
+                                </Form.Item>
+                            )}
+                        </Col>
+                    </Row>
+                </Card>
+
                 {/* 提交區塊 */}
                 <Card title="提交表單" style={{ marginTop: 20 }}>
                     <Flex justify='space-between' align="center">
                         <span style={{ fontSize: 18, fontWeight: 'bold' }}>
-                            總金額: $100
+                            商品總金額: ${totalAmount.toLocaleString()}
                         </span>
                         <Button type="primary" htmlType="submit" loading={isSubmitLoading}>
                             提交

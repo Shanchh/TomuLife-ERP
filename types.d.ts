@@ -97,3 +97,31 @@ export interface PurchaseStatistics {
     ordersCount: number;
     productStats: PurchaseStatisticsItem[];
 }
+
+export interface SalesReportPayload {
+    basicInfo: {
+        purchaseDate: number;
+        areaCode: string;
+        customerId: string;
+    };
+    items: {
+        [productId: string]: {
+            quantity: number;
+            price: number;
+        };
+    };
+    accounting: {
+        paymentStatus: "unpaid" | "paid" | "gift";
+        isTaxIncluded?: "included" | "excluded";
+        receivableAmount?: number;
+        invoiceNumber?: string;
+        paymentDate?: number;
+        paymentType?: "cash" | "eSunBank" | "yuantaBank";
+        remitCode?: string;
+    };
+    delivery: {
+        deliveryMethod: "selfDelivery" | "hsinchuLogistics";
+        deliveryBoxes?: number;
+    };
+    remarks?: string;
+}
