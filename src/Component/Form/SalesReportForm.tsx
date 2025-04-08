@@ -417,6 +417,9 @@ const SalesReportForm = () => {
 
                 {/* 提交區塊 */}
                 <Card title="提交表單" style={{ marginTop: 20 }}>
+                    <Form.Item label="其他備註" name={["others", "remarks"]}>
+                        <Input.TextArea placeholder="其他備註" rows={2} allowClear />
+                    </Form.Item>
                     <Flex justify='space-between' align="center">
                         <span style={{ fontSize: 18, fontWeight: 'bold' }}>
                             商品總金額: ${totalAmount.toLocaleString()}

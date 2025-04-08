@@ -98,19 +98,25 @@ export interface PurchaseStatistics {
     productStats: PurchaseStatisticsItem[];
 }
 
-export interface SalesReportPayload {
+export interface SalesReport {
+    _id: string;
     basicInfo: {
         purchaseDate: number;
         areaCode: string;
-        customerId: string;
+        customer: string;
+        customerName: string;
+        customerBookkeeping: string;
     };
-    items: {
-        [productId: string]: {
-            quantity: number;
-            price: number;
-        };
-    };
-    accounting: {
+    productSection: {
+        remarks: string;
+        products: {
+            [productId: string]: {
+                quantity: string;
+                price: string;
+            }
+        }
+    }
+    billing: {
         paymentStatus: "unpaid" | "paid" | "gift";
         isTaxIncluded?: "included" | "excluded";
         receivableAmount?: number;
@@ -123,5 +129,13 @@ export interface SalesReportPayload {
         deliveryMethod: "selfDelivery" | "hsinchuLogistics";
         deliveryBoxes?: number;
     };
-    remarks?: string;
+    others: {
+        remarks?: string;
+    };
+    creator: {
+        _id: string;
+        nickname: string;
+        email: string;
+    };
+    createdAt: number;
 }

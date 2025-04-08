@@ -269,13 +269,26 @@ def get_purchase_statistics():
 def create_sales_reports():
     try:
         data = request.get_json()
+        values = data.get("values", {})
 
         submitter = db["Users"].find_one({"email": g.curUser.email})
+
+        # 轉換商品數據為整數
+        raw_products = values.get("productSection", {}).get("products", {})
+        transformed_products = {}
+        for product_id, item in raw_products.items():
+            transformed_products[product_id] = {
+                "quantity": int(item.get("quantity", 0)),
+                "price": int(item.get("price", 0))
+            }
+
+        values["productSection"]["products"] = transformed_products
+        values["billing"]["receivableAmount"] = int(values["billing"]["receivableAmount"])
 
         # 插入進貨訂單
         collection = db["SalesReport"]
         insert_data = {
-            **data["values"],
+            **values,
             "creator": {
                 "_id": str(submitter["_id"]),
                 "nickname": submitter["nickname"],
