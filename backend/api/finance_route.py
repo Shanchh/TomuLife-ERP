@@ -5,7 +5,7 @@ import time
 from datetime import datetime
 
 from utils.auth import login_required, admin_required
-from utils.tools import pop_objectId
+from utils.tools import pop_objectId, build_query
 
 finance_api = Blueprint("finance_api", __name__)
 
@@ -283,7 +283,12 @@ def create_sales_reports():
             }
 
         values["productSection"]["products"] = transformed_products
-        values["billing"]["receivableAmount"] = int(values["billing"]["receivableAmount"])
+
+        if values["billing"]["paymentStatus"] == "gift":
+            values["billing"]["receivableAmount"] = 0
+            values["billing"]["isTaxIncluded"] = None
+        else:
+            values["billing"]["receivableAmount"] = int(values["billing"]["receivableAmount"])
 
         # 插入進貨訂單
         collection = db["SalesReport"]
@@ -300,5 +305,52 @@ def create_sales_reports():
         result = collection.insert_one(insert_data)
 
         return jsonify({"message": "Purchase order created successfully", "orderID": str(result.inserted_id)}), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+    
+@finance_api.route("/get_sales_report", methods=["POST"])
+@login_required
+@admin_required
+def get_sales_report():
+    try:
+        data: dict = request.get_json()
+        page = data.get("page", 1)
+        page_size = data.get("page_size", 1)
+        query: dict = data.get("query", {})
+        skip = (page - 1) * page_size
+
+        collection = db["SalesReport"]
+        query = build_query(query)
+        total = collection.count_documents(query)
+        sales_report_list = list(collection.find(query).sort("basicInfo.purchaseDate", -1).skip(skip).limit(page_size))
+
+        result = {
+            "code": 0,
+            "message": "SalesReport data retrieved successfully",
+            "data": pop_objectId(sales_report_list),
+            "total": total
+        }
+
+        return jsonify(result), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+    
+@finance_api.route("/delete_sales_report", methods=["POST"])
+@login_required
+@admin_required
+def delete_sales_report():
+    try:
+        data: dict = request.get_json()
+        _id = data["_id"]
+
+        collection = db["SalesReport"]
+        r = collection.delete_one({"_id": ObjectId(_id)})
+
+        result = {
+            "code": 0,
+            "delete_count": r.deleted_count
+        }
+
+        return jsonify(result), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500

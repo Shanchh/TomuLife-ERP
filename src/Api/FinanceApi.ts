@@ -54,3 +54,22 @@ export const create_sales_reports = async (values: any) => {
         throw err;
     }
 };
+
+export const get_sales_report = async (page = 1, page_size = 10, query: any = {}) => {
+    try {
+        const res = await axios.post("/finance/get_sales_report", { page, page_size, query });
+        return res.data;
+    } catch (err) {
+        throw err;
+    }
+};
+
+export const delete_sales_report = async (_id: string) => {
+    try {
+        const res = await axios.post("/finance/delete_sales_report", { _id });
+        return res.data;
+    }
+    catch (err) {
+        throw err;
+    }
+};

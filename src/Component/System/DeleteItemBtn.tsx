@@ -2,9 +2,9 @@ import { Button, message, Modal } from 'antd';
 import { DeleteOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 import React, { useState } from 'react';
 import { delete_customer, delete_product, delete_role, delete_user_profile } from '../../Api/SystemApi';
-import { delete_purchase_orders } from "../../Api/FinanceApi";
+import { delete_purchase_orders, delete_sales_report } from "../../Api/FinanceApi";
 
-type ItemType = 'customer' | 'role' | 'user' | 'product' | 'purchase_orders';
+type ItemType = 'customer' | 'role' | 'user' | 'product' | 'purchase_orders' | 'sale_report';
 
 interface DeleteItemBtnProps<T> {
     type: ItemType;
@@ -52,6 +52,25 @@ const DeleteItemBtn = <T extends { _id: string } & Record<string, any>>({ type, 
                     message: `請確認是否將這筆總金額為 ${data.totalAmount} 的資料刪除？`,
                     successMsg: '成功刪除進貨明細！',
                     title: '刪除進貨明細'
+                };
+            case 'sale_report':
+                return {
+                    api: () => delete_sales_report(data._id),
+                    message: (
+                        <span>
+                            請確認是否將這筆日期為
+                            <span style={{ color: 'red', fontWeight: 'bold' }}>
+                                {new Date(data.basicInfo.purchaseDate * 1000).toLocaleDateString()}
+                            </span>
+                            ，金額為
+                            <span style={{ color: 'red', fontWeight: 'bold' }}>
+                                ${Number(data.billing.receivableAmount).toLocaleString()}
+                            </span>
+                            的銷售明細刪除？
+                        </span>
+                    ),
+                    successMsg: '成功刪除銷售明細！',
+                    title: '刪除銷售明細'
                 };
             default:
                 throw new Error('未知類型');
