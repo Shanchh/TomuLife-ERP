@@ -45,3 +45,12 @@ export const get_purchase_statistics = async (year: number) => {
         throw err;
     }
 };
+
+export const create_sales_reports = async (values: any) => {
+    try {
+        const res = await axios.post("/finance/create_sales_reports", { values });
+        return res.data;
+    } catch (err) {
+        throw err;
+    }
+};

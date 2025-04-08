@@ -262,3 +262,30 @@ def get_purchase_statistics():
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+    
+@finance_api.route("/create_sales_reports", methods=["POST"])
+@login_required
+@admin_required
+def create_sales_reports():
+    try:
+        data = request.get_json()
+
+        submitter = db["Users"].find_one({"email": g.curUser.email})
+
+        # 插入進貨訂單
+        collection = db["SalesReport"]
+        insert_data = {
+            **data["values"],
+            "creator": {
+                "_id": str(submitter["_id"]),
+                "nickname": submitter["nickname"],
+                "email": submitter["email"]
+            },
+            "createdAt": int(time.time())
+        }
+
+        result = collection.insert_one(insert_data)
+
+        return jsonify({"message": "Purchase order created successfully", "orderID": str(result.inserted_id)}), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500

@@ -4,12 +4,15 @@ import { get_customers, get_products } from '../../Api/SystemApi';
 import { Customer, Product } from '../../../types';
 import { locations } from '../../Constants/locations';
 import { DeleteOutlined } from '@ant-design/icons';
+import { create_sales_reports } from '../../Api/FinanceApi';
+import { useNavigate } from 'react-router-dom';
 
 const { Title } = Typography;
 
 const SalesReportForm = () => {
     const [form] = Form.useForm();
     const watchedProducts = Form.useWatch(["productSection", "products"], form);
+    const navigate = useNavigate();
 
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [isSubmitLoading, setIsSubmitLoading] = useState<boolean>(false);
@@ -79,19 +82,58 @@ const SalesReportForm = () => {
     const totalAmount = useMemo(() => {
         if (!watchedProducts) return 0;
         let total = 0;
-    
+
         Object.values(watchedProducts).forEach((item: any) => {
             const quantity = parseFloat(item?.quantity) || 0;
             const price = parseFloat(item?.price) || 0;
             total += quantity * price;
         });
-    
+
         return total;
     }, [watchedProducts]);
 
     const handleSubmit = async () => {
+        setIsSubmitLoading(true);
         const values = form.getFieldsValue();
-        console.log(values);
+
+        if (selectedProducts.length === 0) {
+            message.error("請至少選擇一個產品");
+            setIsSubmitLoading(false);
+            return;
+        }
+
+        const customer = customersList.find(c => c._id === values.basicInfo.customer);
+        const transformed = {
+            ...values,
+            basicInfo: {
+                ...values.basicInfo,
+                customerName: customer?.customerName ?? "",
+                customerBookkeeping: customer?.bookkeeping ?? "",
+                purchaseDate: values.basicInfo.purchaseDate
+                    ? new Date(values.basicInfo.purchaseDate).getTime() / 1000
+                    : null,
+            },
+            billing: {
+                ...values.billing,
+                paymentDate: values.billing?.paymentDate
+                    ? new Date(values.billing.paymentDate).getTime() / 1000
+                    : null,
+            },
+        };
+
+        try {
+            await create_sales_reports(transformed);
+            message.success("成功創建進貨訂單");
+
+            form.resetFields();
+            navigate("/finance/sales-management/details");
+        }
+        catch {
+            message.error("進貨訂單處理時發生錯誤！");
+        }
+        finally {
+            setIsSubmitLoading(false);
+        }
     };
 
     return (
