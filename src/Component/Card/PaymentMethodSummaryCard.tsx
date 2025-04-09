@@ -30,8 +30,8 @@ const PaymentMethodSummaryCard = ({ dateRange }: Props) => {
 
     return (
         <Card
-            title="銷售收款概況"
-            style={{ width: "50%" }}
+            title="付款方式概況"
+            style={{ width: "100%" }}
         >
             <Flex justify="center" align="center" style={{ width: "100%" }}>
                 {isLoading ? (

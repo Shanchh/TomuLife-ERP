@@ -95,10 +95,14 @@ const FinanceSalesStatistics = () => {
         </Form>
       </Card>
 
-      <Flex gap={8}>
-        <SalesPaymentSummaryCard dateRange={dateRange} />
-        <PaymentMethodSummaryCard dateRange={dateRange} />
-      </Flex>
+      <Row gutter={[8, 8]} style={{ width: "100%" }}>
+        <Col sm={24} md={24} lg={12}>
+          <SalesPaymentSummaryCard dateRange={dateRange} />
+        </Col>
+        <Col sm={24} md={24} lg={12}>
+          <PaymentMethodSummaryCard dateRange={dateRange} />
+        </Col>
+      </Row>
     </Flex>
   )
 }

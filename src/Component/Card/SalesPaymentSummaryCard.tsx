@@ -31,7 +31,7 @@ const SalesPaymentSummaryCard = ({ dateRange }: Props) => {
     return (
         <Card
             title="銷售收款概況"
-            style={{ width: "50%" }}
+            style={{ width: "100%" }}
         >
             <Flex justify="center" align="center" style={{ width: "100%" }}>
                 {isLoading ? (
