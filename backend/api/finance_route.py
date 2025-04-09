@@ -392,3 +392,99 @@ def delete_sales_report():
         return jsonify(result), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+    
+@finance_api.route("/get_sales_payment_summary", methods=["POST"])
+@login_required
+@admin_required
+def get_sales_payment_summary():
+    try:
+        data: dict = request.get_json()
+        start_time = int(data["startTime"] / 1000)
+        end_time = int(data["endTime"] / 1000)
+
+        collection = db["SalesReport"]
+        orders = list(collection.find({
+            "basicInfo.purchaseDate": {
+                "$gte": start_time,
+                "$lte": end_time
+            }
+        }))
+
+        total_count = len(orders)
+        paid_total = 0
+        paid_count = 0
+        unpaid_total = 0
+        unpaid_count = 0
+
+        for order in orders:
+            billing = order.get("billing", {})
+            status = billing.get("paymentStatus")
+            amount = billing.get("receivableAmount", 0)
+
+            if status == "paid":
+                paid_count += 1
+                paid_total += amount
+            elif status == "unpaid":
+                unpaid_count += 1
+                unpaid_total += amount
+
+        result = {
+            "code": 0,
+            "totalCount": total_count,
+            "paidCount": paid_count,
+            "paidAmount": paid_total,
+            "unpaidCount": unpaid_count,
+            "unpaidAmount": unpaid_total
+        }
+
+        return jsonify(result), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+    
+@finance_api.route("/get_payment_method_summary", methods=["POST"])
+@login_required
+@admin_required
+def get_payment_method_summary():
+    try:
+        data: dict = request.get_json()
+        start_time = int(data["startTime"] / 1000)
+        end_time = int(data["endTime"] / 1000)
+
+        collection = db["SalesReport"]
+        orders = list(collection.find({
+            "basicInfo.purchaseDate": {
+                "$gte": start_time,
+                "$lte": end_time
+            }
+        }))
+
+        cash = 0
+        e_sun = 0
+        yuan_ta = 0
+
+        for order in orders:
+            billing = order.get("billing", {})
+            status = billing.get("paymentStatus")
+            payment_type = billing.get("paymentType")
+            amount = billing.get("receivableAmount", 0)
+
+            if status != "paid":
+                continue
+            
+            if payment_type == "cash":
+                cash += amount
+            elif payment_type == "eSunBank":
+                e_sun += amount
+            elif payment_type == "yuantaBank":
+                yuan_ta += amount
+
+        result = {
+            "code": 0,
+            "cashAmount": cash,
+            "eSunAmount": e_sun,
+            "yuantaAmount": yuan_ta
+        }
+
+        return jsonify(result), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500

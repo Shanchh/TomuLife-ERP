@@ -82,3 +82,21 @@ export const update_sales_reports = async (dataId: string, values: any) => {
         throw err;
     }
 };
+
+export const get_sales_payment_summary = async (startTime: number, endTime: number) => {
+    try {
+        const res = await axios.post("/finance/get_sales_payment_summary", { startTime, endTime });
+        return res.data;
+    } catch (err) {
+        throw err;
+    }
+};
+
+export const get_payment_method_summary = async (startTime: number, endTime: number) => {
+    try {
+        const res = await axios.post("/finance/get_payment_method_summary", { startTime, endTime });
+        return res.data;
+    } catch (err) {
+        throw err;
+    }
+};
