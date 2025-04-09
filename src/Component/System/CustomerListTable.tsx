@@ -26,36 +26,43 @@ const CustomerListTable: React.FC<CustomerListTableProps> = ({ data, isLoading, 
             title: "會計科目",
             dataIndex: "bookkeeping",
             align: "center",
+            render: (bookkeeping: string) => bookkeeping || "-"
         },
         {
             title: "客戶名",
             dataIndex: "customerName",
             align: "center",
+            render: (customerName: string) => customerName || "-"
         },
         {
             title: "收貨地址",
             dataIndex: "deliveryAddress",
             align: "center",
+            render: (deliveryAddress: string) => deliveryAddress || "-"
         },
         {
             title: "聯絡人",
             dataIndex: "contactPerson",
             align: "center",
+            render: (contactPerson: string) => contactPerson || "-"
         },
         {
             title: "聯繫方式",
             dataIndex: "contactMethod",
             align: "center",
+            render: (contactMethod: string) => contactMethod || "-"
         },
         {
             title: "抬頭",
             dataIndex: "invoiceTitle",
             align: "center",
+            render: (invoiceTitle: string) => invoiceTitle || "-"
         },
         {
             title: "統一編號",
             dataIndex: "taxId",
             align: "center",
+            render: (taxId: string) => taxId || "-"
         },
         {
             title: "創建者",

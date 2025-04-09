@@ -60,6 +60,7 @@ const PurchaseDetailsTable: React.FC<PurchaseDetailsTableProps> = ({ isLoading, 
             title: "備註說明",
             dataIndex: "remarks",
             align: "center",
+            render: (remarks: string) => remarks || "-"
         },
         {
             title: "創建者",
