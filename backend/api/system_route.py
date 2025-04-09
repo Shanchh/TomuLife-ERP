@@ -169,7 +169,7 @@ def add_role():
 def get_customers():
     try:
         collection = db["Customers"]
-        customer_list = list(collection.find())
+        customer_list = list(collection.find().sort("bookkeeping", 1))
 
         result = {
             "code": 0,
