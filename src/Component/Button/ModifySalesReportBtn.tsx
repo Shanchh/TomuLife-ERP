@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { SalesReport } from '../../../types';
+import { Customer, Product, SalesReport } from '../../../types';
 import { Button, Modal } from 'antd';
 import { EditOutlined } from '@ant-design/icons';
 import SalesReportForm from '../Form/SalesReportForm';
@@ -7,9 +7,11 @@ import SalesReportForm from '../Form/SalesReportForm';
 interface ModifySalesReportBtnProps {
     initialData: SalesReport;
     refreshData: () => void;
+    products: Product[];
+    customers: Customer[];
 }
 
-const ModifySalesReportBtn: React.FC<ModifySalesReportBtnProps> = ({ initialData, refreshData }) => {
+const ModifySalesReportBtn: React.FC<ModifySalesReportBtnProps> = ({ initialData, refreshData, products, customers }) => {
     const [modalOpen, setModalOpen] = useState<boolean>(false);
 
     return (
@@ -25,7 +27,7 @@ const ModifySalesReportBtn: React.FC<ModifySalesReportBtnProps> = ({ initialData
                 style={{ top: 100 }}
                 footer={null}
             >
-                <SalesReportForm initialData={initialData} refreshData={refreshData} setModalOpen={setModalOpen}/>
+                <SalesReportForm initialData={initialData} refreshData={refreshData} setModalOpen={setModalOpen} products={products} customers={customers}/>
             </Modal>
         </>
     )

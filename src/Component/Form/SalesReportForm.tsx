@@ -14,9 +14,11 @@ interface SalesReportFormProps {
     initialData?: SalesReport;
     setModalOpen?: (open: boolean) => void;
     refreshData?: () => void;
+    products?: Product[];
+    customers?: Customer[];
 }
 
-const SalesReportForm: React.FC<SalesReportFormProps> = ({ initialData, refreshData, setModalOpen }) => {
+const SalesReportForm: React.FC<SalesReportFormProps> = ({ initialData, refreshData, setModalOpen, products, customers }) => {
     const [form] = Form.useForm();
     const watchedProducts = Form.useWatch(["productSection", "products"], form);
     const navigate = useNavigate();
@@ -39,16 +41,16 @@ const SalesReportForm: React.FC<SalesReportFormProps> = ({ initialData, refreshD
     const fetchData = async () => {
         setIsLoading(true);
         try {
-            const products: Product[] = await get_products();
-            const customers: Customer[] = await get_customers();
-
-            setProductList(products);
-            setCustomersList(customers);
-        }
-        catch {
+            const [resolvedProducts, resolvedCustomers] = await Promise.all([
+                products ? Promise.resolve(products) : get_products(),
+                customers ? Promise.resolve(customers) : get_customers(),
+            ]);
+    
+            setProductList(resolvedProducts);
+            setCustomersList(resolvedCustomers);
+        } catch {
             message.error("預先載入資料時發生錯誤！");
-        }
-        finally {
+        } finally {
             setIsLoading(false);
         }
     };

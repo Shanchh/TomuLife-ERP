@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import { Product, SalesReport } from '../../../types'
+import { Customer, Product, SalesReport } from '../../../types'
 import { get_sales_report } from '../../Api/FinanceApi';
-import { Button, Card, Flex, Form, Table, TableColumnsType, Tooltip } from 'antd';
+import { Button, Card, Col, Flex, Form, message, Radio, Row, Select, Table, TableColumnsType, Tooltip } from 'antd';
 import SalesStatusTags from '../../Component/SalesStatusTags';
-import {ReloadOutlined } from '@ant-design/icons';
+import { ReloadOutlined, SearchOutlined } from '@ant-design/icons';
 import SalesReportDescriptionsBtn from '../../Component/Button/SalesReportDescriptionsBtn';
-import { get_products } from '../../Api/SystemApi';
+import { get_customers, get_products } from '../../Api/SystemApi';
 import SalesPaymentDetailBtn from '../../Component/Button/SalesPaymentDetailBtn';
 import TaxBadge from '../../Component/TaxBadge';
 import DeleteItemBtn from '../../Component/System/DeleteItemBtn';
@@ -23,6 +23,7 @@ const FinanceSalesDetails = () => {
   const [searchQuery, setSearchQuery] = useState({});
 
   const [productList, setProductList] = useState<Product[]>([]);
+  const [customerList, setCustomerList] = useState<Customer[]>([]);
 
   const refreshData = () => {
     setIsLoading(true);
@@ -34,10 +35,21 @@ const FinanceSalesDetails = () => {
       .finally(() => setIsLoading(false));
   }
 
-  const initPage = () => {
-    get_products()
-      .then((value: Product[]) => setProductList(value))
-      .finally(() => setIsLoading(false));
+  const initPage = async () => {
+    setIsLoading(true);
+    try {
+      const products = await get_products();
+      const customers = await get_customers();
+
+      setProductList(products);
+      setCustomerList(customers);
+    }
+    catch {
+      message.error("初始化頁面時發生錯誤！");
+    }
+    finally {
+      setIsLoading(false)
+    }
   };
 
   useEffect(() => {
@@ -140,11 +152,11 @@ const FinanceSalesDetails = () => {
       render: (data: SalesReport) => (
         <Flex gap={10} justify="center" align="center">
           <Tooltip title="編輯銷售明細">
-            <ModifySalesReportBtn initialData={data} refreshData={refreshData}/>
+            <ModifySalesReportBtn initialData={data} refreshData={refreshData} products={productList} customers={customerList}/>
           </Tooltip>
 
           <Tooltip title="刪除銷售明細">
-            <DeleteItemBtn type="sale_report" data={data} handleDelete={handleDelete}/>
+            <DeleteItemBtn type="sale_report" data={data} handleDelete={handleDelete} />
           </Tooltip>
         </Flex>
       )
@@ -153,6 +165,55 @@ const FinanceSalesDetails = () => {
 
   return (
     <Card style={{ overflow: "hidden", height: "100%" }}>
+      <Form
+        form={form}
+        name="salesReport_search"
+        style={{ width: "100%", marginBottom: 16 }}
+      >
+        <Row justify="start" gutter={[18, 18]}>
+          <Col>
+            <Form.Item name="paymentStatus" initialValue={'all'}>
+              <Flex justify="start" align="center" gap={10}>
+                <span style={{ whiteSpace: "nowrap" }}>銷售狀態:</span>
+                <Radio.Group defaultValue="all">
+                  <Radio.Button value="all">全選</Radio.Button>
+                  <Radio.Button value="unpaid">未付款</Radio.Button>
+                  <Radio.Button value="paid">已收款</Radio.Button>
+                  <Radio.Button value="gift">贈送</Radio.Button>
+                </Radio.Group>
+              </Flex>
+            </Form.Item>
+          </Col>
+
+          <Col>
+            <Form.Item>
+              <Flex justify="start" align="center" gap={10}>
+                <span style={{ whiteSpace: "nowrap" }}>搜尋客戶:</span>
+                <Select
+                  size="middle"
+                  defaultValue="none"
+                  style={{ width: 120 }}
+                />
+
+                <Select
+                  size="middle"
+                  defaultValue="none"
+                  style={{ width: 128 }}
+                />
+              </Flex>
+            </Form.Item>
+          </Col>
+        </Row>
+
+        <Flex justify="end" style={{ paddingTop: 10 }} gap={10}>
+          <Button htmlType="submit" type="primary" icon={<SearchOutlined />}>
+            條件查詢
+          </Button>
+          <Button type="default">
+            清除條件
+          </Button>
+        </Flex>
+      </Form>
 
       <Flex style={{ marginBottom: 15 }} gap={15}>
         <Button variant="text" onClick={refreshData}>
