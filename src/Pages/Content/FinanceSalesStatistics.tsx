@@ -96,16 +96,16 @@ const FinanceSalesStatistics = () => {
         </Form>
       </Card>
 
-      <Row gutter={[8, 8]} style={{ width: "100%" }}>
-        <Col sm={24} md={24} lg={12}>
+      <Row gutter={[8, 8]}>
+        <Col xs={24} sm={24} md={24} lg={12} xl={12} xxl={12}>
           <SalesPaymentSummaryCard dateRange={dateRange} />
         </Col>
-        <Col sm={24} md={24} lg={12}>
+        <Col xs={24} sm={24} md={24} lg={12} xl={12} xxl={12}>
           <PaymentMethodSummaryCard dateRange={dateRange} />
         </Col>
       </Row>
 
-      <ProductSalesChartCard dateRange={dateRange}/>
+      <ProductSalesChartCard dateRange={dateRange} />
     </Flex>
   )
 }
