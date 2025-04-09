@@ -1,15 +1,22 @@
 import { message, Spin, Typography, Form, Card, Row, Col, DatePicker, Select, Flex, Button, Input, Radio, Space, Divider } from 'antd';
 import React, { useEffect, useMemo, useState } from 'react';
 import { get_customers, get_products } from '../../Api/SystemApi';
-import { Customer, Product } from '../../../types';
+import { Customer, Product, SalesReport } from '../../../types';
 import { locations } from '../../Constants/locations';
 import { DeleteOutlined } from '@ant-design/icons';
-import { create_sales_reports } from '../../Api/FinanceApi';
+import { create_sales_reports, update_sales_reports } from '../../Api/FinanceApi';
 import { useNavigate } from 'react-router-dom';
+import dayjs from 'dayjs';
 
 const { Title } = Typography;
 
-const SalesReportForm = () => {
+interface SalesReportFormProps {
+    initialData?: SalesReport;
+    setModalOpen?: (open: boolean) => void;
+    refreshData?: () => void;
+}
+
+const SalesReportForm: React.FC<SalesReportFormProps> = ({ initialData, refreshData, setModalOpen }) => {
     const [form] = Form.useForm();
     const watchedProducts = Form.useWatch(["productSection", "products"], form);
     const navigate = useNavigate();
@@ -58,6 +65,37 @@ const SalesReportForm = () => {
             setAreaCustomers(customersList.filter(c => c.areaCode === areaCodeValue));
         }
     }, [areaCodeValue, customersList]);
+
+    useEffect(() => {
+        if (initialData) {
+            const { basicInfo, billing, delivery, productSection, others } = initialData;
+
+            form.setFieldsValue({
+                basicInfo: {
+                    ...basicInfo,
+                    purchaseDate: dayjs.unix(basicInfo.purchaseDate),
+                },
+                billing: {
+                    ...billing,
+                    paymentDate: billing.paymentDate ? dayjs.unix(billing.paymentDate) : null,
+                },
+                delivery,
+                productSection,
+                others,
+            });
+
+            setPaymentStatus(billing.paymentStatus);
+            setIsTaxIncluded(billing.isTaxIncluded ?? null);
+            setPaymentType(billing.paymentType ?? null);
+            setDeliveryMethod(delivery.deliveryMethod ?? null);
+            setSelectedProducts(
+                Object.keys(productSection.products).map((id) =>
+                    productList.find((p) => p._id === id)
+                ).filter(Boolean) as Product[]
+            );
+            setAreaCodeValue(basicInfo.areaCode);
+        }
+    }, [initialData, productList]);
 
     const handleAddProduct = () => {
         if (!selectedProductId) return;
@@ -122,14 +160,21 @@ const SalesReportForm = () => {
         };
 
         try {
-            await create_sales_reports(transformed);
-            message.success("成功創建進貨訂單");
-
+            if (initialData?._id) {
+                await update_sales_reports(initialData._id, transformed);
+                setModalOpen?.(false);
+                message.success("成功更新銷貨訂單");
+                refreshData?.();
+            } else {
+                await create_sales_reports(transformed);
+                message.success("成功創建銷貨訂單");
+            }
+            
             form.resetFields();
             navigate("/finance/sales-management/details");
         }
         catch {
-            message.error("進貨訂單處理時發生錯誤！");
+            message.error("銷貨訂單處理時發生錯誤！");
         }
         finally {
             setIsSubmitLoading(false);
@@ -139,7 +184,7 @@ const SalesReportForm = () => {
     return (
         <Spin spinning={isLoading}>
             <Title level={3} style={{ marginTop: 0, marginBottom: 20 }}>
-                🛒 新增銷貨訂單
+                🛒 {initialData ? "編輯銷貨訂單" : "新增進貨訂單"}
             </Title>
             <Form size={"small"} form={form} layout="vertical" onFinish={handleSubmit}>
                 {/* 銷貨資訊 */}
@@ -425,7 +470,7 @@ const SalesReportForm = () => {
                             商品總金額: ${totalAmount.toLocaleString()}
                         </span>
                         <Button type="primary" htmlType="submit" loading={isSubmitLoading}>
-                            提交
+                            {initialData ? "更新" : "提交"}
                         </Button>
                     </Flex>
                 </Card>

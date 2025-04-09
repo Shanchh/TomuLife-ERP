@@ -73,3 +73,12 @@ export const delete_sales_report = async (_id: string) => {
         throw err;
     }
 };
+
+export const update_sales_reports = async (dataId: string, values: any) => {
+    try {
+        const res = await axios.post("/finance/update_sales_reports", { dataId, values });
+        return res.data;
+    } catch (err) {
+        throw err;
+    }
+};

@@ -9,6 +9,7 @@ import { get_products } from '../../Api/SystemApi';
 import SalesPaymentDetailBtn from '../../Component/Button/SalesPaymentDetailBtn';
 import TaxBadge from '../../Component/TaxBadge';
 import DeleteItemBtn from '../../Component/System/DeleteItemBtn';
+import ModifySalesReportBtn from '../../Component/Button/ModifySalesReportBtn';
 
 const FinanceSalesDetails = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -139,7 +140,7 @@ const FinanceSalesDetails = () => {
       render: (data: SalesReport) => (
         <Flex gap={10} justify="center" align="center">
           <Tooltip title="編輯銷售明細">
-            11
+            <ModifySalesReportBtn initialData={data} refreshData={refreshData}/>
           </Tooltip>
 
           <Tooltip title="刪除銷售明細">

@@ -308,6 +308,44 @@ def create_sales_reports():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
     
+@finance_api.route("/update_sales_reports", methods=["POST"])
+@login_required
+@admin_required
+def update_sales_reports():
+    try:
+        data = request.get_json()
+        data_id = data["dataId"]
+        values = data.get("values", {})
+
+        # 轉換商品數據為整數
+        raw_products = values.get("productSection", {}).get("products", {})
+        transformed_products = {}
+        for product_id, item in raw_products.items():
+            transformed_products[product_id] = {
+                "quantity": int(item.get("quantity", 0)),
+                "price": int(item.get("price", 0))
+            }
+
+        values["productSection"]["products"] = transformed_products
+
+        if values["billing"]["paymentStatus"] == "gift":
+            values["billing"]["receivableAmount"] = 0
+            values["billing"]["isTaxIncluded"] = None
+        else:
+            values["billing"]["receivableAmount"] = int(values["billing"]["receivableAmount"])
+
+        collection = db["SalesReport"]
+
+        result = collection.update_one(
+            {"_id": ObjectId(data_id)},
+            {"$set": values}
+        )
+
+        return jsonify({"message": "Sales report updated successfully", "orderID": data_id}), 200
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+    
 @finance_api.route("/get_sales_report", methods=["POST"])
 @login_required
 @admin_required
