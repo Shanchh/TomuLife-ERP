@@ -100,3 +100,12 @@ export const get_payment_method_summary = async (startTime: number, endTime: num
         throw err;
     }
 };
+
+export const get_products_sales_statistics = async (startTime: number, endTime: number) => {
+    try {
+        const res = await axios.post("/finance/get_products_sales_statistics", { startTime, endTime });
+        return res.data.data;
+    } catch (err) {
+        throw err;
+    }
+};

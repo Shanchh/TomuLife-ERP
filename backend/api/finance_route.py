@@ -488,3 +488,54 @@ def get_payment_method_summary():
         return jsonify(result), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+    
+@finance_api.route("/get_products_sales_statistics", methods=["POST"])
+@login_required
+@admin_required
+def get_products_sales_statistics():
+    try:
+        data: dict = request.get_json()
+        start_time = int(data["startTime"] / 1000)
+        end_time = int(data["endTime"] / 1000)
+
+        product_collection = db["Products"]
+        product_docs = list(product_collection.find())
+        product_map = {str(p["_id"]): p["productName"] for p in product_docs}
+
+        statistics = {}
+
+        sales_collection = db["SalesReport"]
+        sales_reports = sales_collection.find({
+            "basicInfo.purchaseDate": {
+                "$gte": start_time,
+                "$lte": end_time
+            }
+        })
+
+        for report in sales_reports:
+            product_section = report.get("productSection", {})
+            products = product_section.get("products", {})
+
+            for product_id, p in products.items():
+                quantity = p.get("quantity", 0)
+                price = p.get("price", 0)
+
+                if product_id not in statistics:
+                    statistics[product_id] = {
+                        "productId": product_id,
+                        "productName": product_map.get(product_id, "未知產品"),
+                        "totalQuantity": 0,
+                        "totalRevenue": 0
+                    }
+
+                statistics[product_id]["totalQuantity"] += quantity
+                statistics[product_id]["totalRevenue"] += quantity * price
+
+        result = {
+            "code": 0,
+            "data": list(statistics.values())
+        }
+
+        return jsonify(result), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500

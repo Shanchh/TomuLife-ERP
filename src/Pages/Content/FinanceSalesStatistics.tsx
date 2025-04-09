@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import dayjs from 'dayjs'
 import SalesPaymentSummaryCard from '../../Component/Card/SalesPaymentSummaryCard';
 import PaymentMethodSummaryCard from '../../Component/Card/PaymentMethodSummaryCard';
+import ProductSalesChartCard from '../../Component/Card/ProductSalesChartCard';
 
 const FinanceSalesStatistics = () => {
   const [form] = Form.useForm();
@@ -103,6 +104,8 @@ const FinanceSalesStatistics = () => {
           <PaymentMethodSummaryCard dateRange={dateRange} />
         </Col>
       </Row>
+
+      <ProductSalesChartCard dateRange={dateRange}/>
     </Flex>
   )
 }
