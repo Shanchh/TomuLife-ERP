@@ -72,10 +72,25 @@ const FinanceSalesDetails = () => {
       setAreaCustomers(customerList.filter(c => c.areaCode === areaCodeValue));
     }
   }, [areaCodeValue, customerList]);
-  
+
   const onFormSubmit = () => {
-    const query = form.getFieldsValue();
-    console.log(query);
+    const rawQuery = form.getFieldsValue();
+
+    const query = { ...rawQuery };
+
+    if (query.monthSelect) {
+      query.monthSelect = query.monthSelect.format("YYYY-MM");
+    }
+
+    if (query.paymentStatus === "all") {
+      delete query.paymentStatus;
+    }
+
+    if (query.areaCode === "all") {
+      delete query.areaCode;
+    }
+
+    setSearchQuery(query);
   };
 
   return (
@@ -85,9 +100,8 @@ const FinanceSalesDetails = () => {
         name="salesReport_search"
         style={{ width: "100%", marginBottom: 16 }}
         onFinish={onFormSubmit}
-        onValuesChange={(changed, all) => console.log("目前值:", all)} // 可移除，用於 debug
       >
-        <Row justify="start" gutter={[18, 18]}>
+        <Row justify="start" gutter={[18, 18]} style={{marginBottom: 16}}>
           <Col>
             <Flex align="center" gap={10}>
               <span style={{ whiteSpace: "nowrap" }}>選擇月分:</span>
@@ -102,24 +116,24 @@ const FinanceSalesDetails = () => {
           </Col>
 
           <Col>
-            <Form.Item name="paymentStatus" initialValue="all">
-              <Flex justify="start" align="center" gap={10}>
-                <span style={{ whiteSpace: "nowrap" }}>銷售狀態:</span>
+            <Flex justify="start" align="center" gap={10}>
+              <span style={{ whiteSpace: "nowrap" }}>銷售狀態:</span>
+              <Form.Item name="paymentStatus" initialValue="all" noStyle>
                 <Radio.Group>
                   <Radio.Button value="all">全選</Radio.Button>
                   <Radio.Button value="unpaid">未付款</Radio.Button>
                   <Radio.Button value="paid">已收款</Radio.Button>
                   <Radio.Button value="gift">贈送</Radio.Button>
                 </Radio.Group>
-              </Flex>
-            </Form.Item>
+              </Form.Item>
+            </Flex>
           </Col>
 
           <Col>
             <Flex justify="start" align="center" gap={10}>
               <span style={{ whiteSpace: "nowrap" }}>搜尋客戶:</span>
 
-              <Form.Item name="areaCode" noStyle>
+              <Form.Item name="areaCode" initialValue="all" noStyle>
                 <Select
                   showSearch
                   allowClear
@@ -177,18 +191,18 @@ const FinanceSalesDetails = () => {
         {
           isCollapsed == false &&
           <>
-            <Divider style={{ margin: "16px 0" }}>
+            <Divider style={{ margin: "0 0 16px 0" }}>
               <span style={{ color: "#999", fontSize: 15 }}>進階搜尋</span>
             </Divider>
 
             <Row justify="start" gutter={[18, 18]}>
               <Col>
-                <Form.Item name="accountingSubject">
-                  <Flex justify="start" align="center" gap={10}>
-                    <span style={{ whiteSpace: "nowrap" }}>會計科目:</span>
+                <Flex justify="start" align="center" gap={10}>
+                  <span style={{ whiteSpace: "nowrap" }}>會計科目:</span>
+                  <Form.Item name="customerBookkeeping" noStyle>
                     <Input placeholder="請輸入會計科目" style={{ width: 175 }} />
-                  </Flex>
-                </Form.Item>
+                  </Form.Item>
+                </Flex>
               </Col>
 
               <Col>
@@ -225,23 +239,23 @@ const FinanceSalesDetails = () => {
               </Col>
 
               <Col>
-                <Form.Item name="remitCode">
-                  <Flex justify="start" align="center" gap={10}>
-                    <span style={{ whiteSpace: "nowrap" }}>匯款後5碼:</span>
+                <Flex justify="start" align="center" gap={10}>
+                  <span style={{ whiteSpace: "nowrap" }}>匯款後5碼:</span>
+                  <Form.Item name="remitCode" noStyle>
                     <Input placeholder="請輸入匯款後5碼" style={{ width: 175 }} />
-                  </Flex>
-                </Form.Item>
+                  </Form.Item>
+                </Flex>
               </Col>
             </Row>
 
-            <Row justify="start" gutter={[18, 18]} style={{ marginTop: 18 }}>
+            <Row justify="start" gutter={[18, 18]} style={{ marginTop: 18, marginBottom: 12 }}>
               <Col>
-                <Form.Item name="invoiceNumber">
-                  <Flex justify="start" align="center" gap={10}>
-                    <span style={{ whiteSpace: "nowrap" }}>發票號碼:</span>
+                <Flex justify="start" align="center" gap={10}>
+                  <span style={{ whiteSpace: "nowrap" }}>發票號碼:</span>
+                  <Form.Item name="invoiceNumber" noStyle>
                     <Input placeholder="請輸入發票號碼" style={{ width: 175 }} />
-                  </Flex>
-                </Form.Item>
+                  </Form.Item>
+                </Flex>
               </Col>
 
               <Col>
@@ -273,7 +287,11 @@ const FinanceSalesDetails = () => {
           <Button htmlType="submit" type="primary" icon={<SearchOutlined />}>
             條件查詢
           </Button>
-          <Button type="default">
+          <Button type="default" onClick={() => {
+            form.resetFields();
+            setAreaCodeValue("all");
+            setSearchQuery({});
+          }}>
             清除條件
           </Button>
         </Flex>

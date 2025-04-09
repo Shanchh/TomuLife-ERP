@@ -7,6 +7,7 @@ import SalesPaymentDetailBtn from '../../Component/Button/SalesPaymentDetailBtn'
 import TaxBadge from '../../Component/TaxBadge';
 import DeleteItemBtn from '../../Component/System/DeleteItemBtn';
 import ModifySalesReportBtn from '../../Component/Button/ModifySalesReportBtn';
+import { locations } from '../../Constants/locations';
 
 interface SalesReportTableProps {
   data: SalesReport[];
@@ -50,6 +51,12 @@ const SalesReportTable: React.FC<SalesReportTableProps> = ({
       render: (timestamp: number) => (
         <span>{new Date(timestamp * 1000).toLocaleDateString()}</span>
       ),
+    },
+    {
+      title: "編號",
+      dataIndex: ["basicInfo", "areaCode"],
+      align: "center",
+      render: (code: string) => locations[code]?.code + "-" + locations[code]?.name || code || "-"
     },
     {
       title: "客戶名稱",

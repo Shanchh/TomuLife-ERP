@@ -5,7 +5,7 @@ import time
 from datetime import datetime
 
 from utils.auth import login_required, admin_required
-from utils.tools import pop_objectId, build_query
+from utils.tools import pop_objectId, build_query, sales_report_build_query
 
 finance_api = Blueprint("finance_api", __name__)
 
@@ -358,7 +358,7 @@ def get_sales_report():
         skip = (page - 1) * page_size
 
         collection = db["SalesReport"]
-        query = build_query(query)
+        query = sales_report_build_query(query)
         total = collection.count_documents(query)
         sales_report_list = list(collection.find(query).sort("basicInfo.purchaseDate", -1).skip(skip).limit(page_size))
 

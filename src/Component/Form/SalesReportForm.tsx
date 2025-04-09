@@ -45,7 +45,7 @@ const SalesReportForm: React.FC<SalesReportFormProps> = ({ initialData, refreshD
                 products ? Promise.resolve(products) : get_products(),
                 customers ? Promise.resolve(customers) : get_customers(),
             ]);
-    
+
             setProductList(resolvedProducts);
             setCustomersList(resolvedCustomers);
         } catch {
@@ -171,7 +171,7 @@ const SalesReportForm: React.FC<SalesReportFormProps> = ({ initialData, refreshD
                 await create_sales_reports(transformed);
                 message.success("成功創建銷貨訂單");
             }
-            
+
             form.resetFields();
             navigate("/finance/sales-management/details");
         }
@@ -204,14 +204,28 @@ const SalesReportForm: React.FC<SalesReportFormProps> = ({ initialData, refreshD
                                 label="縣市"
                                 name={["basicInfo", "areaCode"]}
                                 rules={[{ required: true }]}
-                                initialValue={"all"}
                             >
                                 <Select
                                     showSearch
                                     allowClear
                                     placeholder="請輸入或選擇縣市"
                                     value={areaCodeValue}
-                                    onChange={(v) => setAreaCodeValue(v)}
+                                    onChange={(v) => {
+                                        setAreaCodeValue(v);
+                                        form.setFieldsValue({
+                                            basicInfo: {
+                                                ...form.getFieldValue("basicInfo"),
+                                                areaCode: v,
+                                                customer: undefined
+                                            }
+                                        });
+
+                                        if (v === "all") {
+                                            setAreaCustomers(customersList);
+                                        } else {
+                                            setAreaCustomers(customersList.filter(c => c.areaCode === v));
+                                        }
+                                    }}
                                     options={[
                                         { label: "ALL-不限代碼", value: "all" },
                                         ...Object.values(locations).map(e => ({
@@ -225,6 +239,7 @@ const SalesReportForm: React.FC<SalesReportFormProps> = ({ initialData, refreshD
                                 />
                             </Form.Item>
                         </Col>
+
                         <Col xs={24} sm={24} md={12}>
                             <Form.Item
                                 label="客戶"
@@ -241,6 +256,19 @@ const SalesReportForm: React.FC<SalesReportFormProps> = ({ initialData, refreshD
                                     filterOption={(input, option) =>
                                         (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
                                     }
+                                    onChange={(value) => {
+                                        const selected = areaCustomers.find(c => c._id === value);
+                                        if (selected) {
+                                            form.setFieldsValue({
+                                                basicInfo: {
+                                                    ...form.getFieldValue("basicInfo"),
+                                                    customer: value,
+                                                    areaCode: selected.areaCode,
+                                                }
+                                            });
+                                            setAreaCodeValue(selected.areaCode);
+                                        }
+                                    }}
                                 />
                             </Form.Item>
                         </Col>

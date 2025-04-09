@@ -1,4 +1,4 @@
-export const locations = {
+export const locations: Record<string, { name: string; code: string }> = {
     "T": { name: "業務(零售)", code: "T" },
     "A": { name: "台北", code: "A" },
     "B": { name: "新北", code: "B" },
