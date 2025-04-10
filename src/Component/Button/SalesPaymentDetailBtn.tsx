@@ -43,6 +43,15 @@ const SalesPaymentDetailBtn: React.FC<SalesPaymentDetailBtnProps> = ({ data, pro
                 footer={null}
             >
                 <Descriptions size="small" bordered column={2}>
+                    <Descriptions.Item label="銷售日期" span={2}>
+                        <span>{new Date(data.basicInfo.purchaseDate * 1000).toLocaleDateString()}</span>
+                    </Descriptions.Item>
+                    <Descriptions.Item label="客戶名稱" span={1}>
+                        {data.basicInfo.customerName ?? "-"}
+                    </Descriptions.Item>
+                    <Descriptions.Item label="會計科目" span={1}>
+                        {data.basicInfo.customerBookkeeping ?? "-"}
+                    </Descriptions.Item>
                     <Descriptions.Item label="付款狀態" span={2}>
                         <SalesStatusTags status={data.billing.paymentStatus} />
                     </Descriptions.Item>

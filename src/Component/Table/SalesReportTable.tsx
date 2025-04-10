@@ -74,12 +74,6 @@ const SalesReportTable: React.FC<SalesReportTableProps> = ({
       render: (record) => <SalesReportDescriptionsBtn data={record} productList={productList} />,
     },
     {
-      title: "價格備註",
-      dataIndex: ["productSection", "remarks"],
-      align: "center",
-      render: (text: string) => text?.trim() ? text : "-"
-    },
-    {
       title: "是否含稅",
       dataIndex: ["billing", "isTaxIncluded"],
       align: "center",
