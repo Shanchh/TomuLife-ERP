@@ -44,6 +44,7 @@ export interface Customer {
 
 export interface Product {
     _id: string;
+    number: number;
     productName: string;
     bottlesPerBox: number;
     retailPrice: number;

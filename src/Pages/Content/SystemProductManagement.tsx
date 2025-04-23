@@ -43,6 +43,11 @@ const SystemProductManagement = () => {
 
   const columns: TableProps["columns"] = [
     {
+      title: "資料編號",
+      dataIndex: "number",
+      align: "center",
+    },
+    {
       title: "商品名稱",
       dataIndex: "productName",
       align: "center",

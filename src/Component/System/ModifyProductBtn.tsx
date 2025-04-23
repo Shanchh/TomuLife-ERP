@@ -72,12 +72,21 @@ const ModifyProductBtn: React.FC<ModifyProductBtnProps> = ({ data, handleModifyP
                         retailPrice: data.retailPrice,
                         costPerBox: data.costPerBox,
                         costPerBottle: data.costPerBottle,
+                        number: data.number,
                     }}
                 >
                     <Form.Item
                         label="創建者"
                     >
                         <Input defaultValue={`${data.creator.nickname} [${data.creator.email}]`} disabled />
+                    </Form.Item>
+
+                    <Form.Item
+                        label={"資料編號"}
+                        name={"number"}
+                        rules={[{ required: true }]}
+                    >
+                        <Input type="number" autoComplete="off" placeholder="請輸入資料編號" />
                     </Form.Item>
 
                     <Form.Item

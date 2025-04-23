@@ -67,6 +67,14 @@ const AddProductBtn: React.FC<AddProductBtnProps> = ({ refreshData }) => {
                     layout="vertical"
                 >
                     <Form.Item
+                        label={"資料編號"}
+                        name={"number"}
+                        rules={[{ required: true }]}
+                    >
+                        <Input type="number" autoComplete="off" placeholder="請輸入資料編號" />
+                    </Form.Item>
+
+                    <Form.Item
                         label={"商品名稱"}
                         name={"productName"}
                         rules={[{ required: true }]}

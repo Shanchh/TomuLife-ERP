@@ -260,7 +260,7 @@ def add_customer():
 def get_products():
     try:
         collection = db["Products"]
-        product_list = list(collection.find())
+        product_list = list(collection.find().sort("number", 1))
 
         result = {
             "code": 0,
@@ -280,6 +280,8 @@ def modify_product():
         data: dict = request.get_json()
         uid = data["uid"]
         values = data["values"]
+
+        values["number"] = int(values["number"])
 
         collection = db["Products"]
         r = collection.update_one({ "_id": ObjectId(uid) }, { "$set": values })
@@ -320,6 +322,8 @@ def add_product():
     try:
         data: dict = request.get_json()
         values = data["values"]
+
+        values["number"] = int(values["number"])
 
         submitter = db["Users"].find_one({"email": g.curUser.email})
 
