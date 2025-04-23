@@ -1,11 +1,13 @@
 import {
   Button, Card, Col, DatePicker, Divider, Flex, Form, Input, InputNumber,
+  message,
   Row, Spin, Table, Typography
 } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { get_products } from '../../Api/SystemApi';
 import FinanceItemsCard from '../Card/FinanceItemsCard';
+import { add_activity_detail } from '../../Api/FinanceApi';
 
 const { Title } = Typography;
 
@@ -18,13 +20,15 @@ interface Product {
 const ActivityReportForm = () => {
   const [form] = Form.useForm();
   const navigate = useNavigate();
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [products, setProducts] = useState<Product[]>([]);
 
-  const [total, setTotal] = useState(0);
-  const [cost, setCost] = useState(0);
-  const [manualIncomeTotal, setManualIncomeTotal] = useState(0);
-  const [manualExpenseTotal, setManualExpenseTotal] = useState(0);
+  const [total, setTotal] = useState<number>(0);
+  const [cost, setCost] = useState<number>(0);
+  const [manualIncomeTotal, setManualIncomeTotal] = useState<number>(0);
+  const [manualExpenseTotal, setManualExpenseTotal] = useState<number>(0);
+
+  const [isSubmitLoading, setIsSubmitLoading] = useState<boolean>(false);
 
   useEffect(() => {
     fetchProducts();
@@ -75,8 +79,9 @@ const ActivityReportForm = () => {
       const discountQty = item.discountQty || 0;
       const trialQty = item.trialQty || 0;
       const discountAmount = item.discountAmount || 0;
+      const gift = item.giftQty || 0;
 
-      const totalQty = quantity + discountQty + trialQty;
+      const totalQty = quantity + discountQty + trialQty + gift;
       const totalPrice = quantity * product.retailPrice + discountAmount;
 
       updatedSales[product._id] = {
@@ -169,6 +174,15 @@ const ActivityReportForm = () => {
       width: 120
     },
     {
+      title: '贈送數量',
+      render: (_: any, record: Product) => (
+        <Form.Item name={['sales', record._id, 'giftQty']} initialValue={0} noStyle rules={[{ required: true, message: '請輸入數字' }]}>
+          <InputNumber min={0} style={{ width: 100 }} />
+        </Form.Item>
+      ),
+      width: 120
+    },
+    {
       title: '合計數量',
       render: (_: any, record: Product) => (
         <Form.Item name={['sales', record._id, 'totalQty']} noStyle initialValue={0} rules={[{ required: true, message: '請輸入數字' }]}>
@@ -246,19 +260,27 @@ const ActivityReportForm = () => {
     }
   ];
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
+    setIsSubmitLoading(true);
     const values = form.getFieldsValue();
-
+  
     const incomes = values.incomes || [];
     const expenses = values.expenses || [];
-
+  
     const totalProductRevenue = total;
     const totalProductCost = cost;
     const totalManualIncome = incomes.reduce((sum: number, item: any) => sum + (item.amount || 0), 0);
     const totalManualExpense = expenses.reduce((sum: number, item: any) => sum + (item.amount || 0), 0);
-
+  
+    const time = {
+      ...values.time,
+      activityStartAt: values.time?.activityStartAt ? Math.floor(values.time.activityStartAt.valueOf() / 1000) : null,
+      activityEndAt: values.time?.activityEndAt ? Math.floor(values.time.activityEndAt.valueOf() / 1000) : null,
+    };
+  
     const result = {
       ...values,
+      time,
       summary: {
         totalProductRevenue,
         totalProductCost,
@@ -266,8 +288,18 @@ const ActivityReportForm = () => {
         totalManualExpense,
       },
     };
-
-    console.log('Submitted form data:', result);
+  
+    try {
+      await add_activity_detail(result);
+      message.success("成功創建活動明細");
+  
+      form.resetFields();
+      navigate("/finance/activity-management/overview");
+    } catch {
+      message.error("活動明細處理時發生錯誤！");
+    } finally {
+      setIsSubmitLoading(false);
+    }
   };
 
   return (
@@ -369,7 +401,7 @@ const ActivityReportForm = () => {
           </Row>
 
           <Flex justify="end" style={{ marginTop: 16 }}>
-            <Button type="primary" htmlType="submit">提交</Button>
+            <Button type="primary" htmlType="submit" loading={isSubmitLoading}>提交</Button>
           </Flex>
         </Card>
       </Form>

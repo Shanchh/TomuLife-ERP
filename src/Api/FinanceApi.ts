@@ -109,3 +109,12 @@ export const get_products_sales_statistics = async (startTime: number, endTime: 
         throw err;
     }
 };
+
+export const add_activity_detail = async (values: any) => {
+    try {
+        const res = await axios.post("/finance/add_activity_detail", { values });
+        return res.data;
+    } catch (err) {
+        throw err;
+    }
+};

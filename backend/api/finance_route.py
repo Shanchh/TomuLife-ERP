@@ -539,3 +539,32 @@ def get_products_sales_statistics():
         return jsonify(result), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+    
+@finance_api.route("/add_activity_detail", methods=["POST"])
+@login_required
+@admin_required
+def add_activity_detail():
+    try:
+        data: dict = request.get_json()
+        values = data["values"]
+
+        submitter = db["Users"].find_one({"email": g.curUser.email})
+
+        insert_data = {
+            **values,
+            "creator": {
+                "_id": str(submitter["_id"]),
+                "nickname": submitter["nickname"],
+                "email": submitter["email"]
+            },
+            "createAt": int(time.time())
+        }
+
+        collection = db["ActivityDetails"]
+
+
+        result = collection.insert_one(insert_data)
+
+        return jsonify({"message": "Activity detail created successfully", "detailID": str(result.inserted_id)}), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
