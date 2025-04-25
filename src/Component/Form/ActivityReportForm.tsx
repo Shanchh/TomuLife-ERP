@@ -7,7 +7,9 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { get_products } from '../../Api/SystemApi';
 import FinanceItemsCard from '../Card/FinanceItemsCard';
-import { add_activity_detail } from '../../Api/FinanceApi';
+import { add_activity_detail, update_activity_detail } from '../../Api/FinanceApi';
+import { ActivityDetail } from '../../../types';
+import dayjs from 'dayjs';
 
 const { Title } = Typography;
 
@@ -17,7 +19,14 @@ interface Product {
   retailPrice: number;
 }
 
-const ActivityReportForm = () => {
+interface ActivityReportFormProps {
+  initialData?: ActivityDetail;
+  refreshData?: () => void;
+  setModalOpen?: (open: boolean) => void;
+}
+
+const ActivityReportForm: React.FC<ActivityReportFormProps> = ({ initialData, refreshData, setModalOpen }) => {
+  const isEditMode = !!initialData;
   const [form] = Form.useForm();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -40,6 +49,29 @@ const ActivityReportForm = () => {
     setProducts(data);
     setIsLoading(false);
   };
+
+  useEffect(() => {
+    fetchProducts();
+
+    if (initialData) {
+      form.setFieldsValue({
+        activityName: initialData.activityName,
+        time: {
+          activityStartAt: dayjs(initialData.time.activityStartAt * 1000),
+          activityEndAt: dayjs(initialData.time.activityEndAt * 1000),
+        },
+        sales: initialData.sales,
+        costs: initialData.costs,
+        incomes: initialData.incomes,
+        expenses: initialData.expenses,
+      });
+
+      setTotal(initialData.summary.totalProductRevenue);
+      setCost(initialData.summary.totalProductCost);
+      setManualIncomeTotal(initialData.summary.totalManualIncome);
+      setManualExpenseTotal(initialData.summary.totalManualExpense);
+    }
+  }, [initialData]);
 
   const calcTotal = () => {
     const salesObj = form.getFieldValue('sales') || {};
@@ -263,21 +295,21 @@ const ActivityReportForm = () => {
   const handleSubmit = async () => {
     setIsSubmitLoading(true);
     const values = form.getFieldsValue();
-  
+
     const incomes = values.incomes || [];
     const expenses = values.expenses || [];
-  
+
     const totalProductRevenue = total;
     const totalProductCost = cost;
     const totalManualIncome = incomes.reduce((sum: number, item: any) => sum + (item.amount || 0), 0);
     const totalManualExpense = expenses.reduce((sum: number, item: any) => sum + (item.amount || 0), 0);
-  
+
     const time = {
       ...values.time,
       activityStartAt: values.time?.activityStartAt ? Math.floor(values.time.activityStartAt.valueOf() / 1000) : null,
       activityEndAt: values.time?.activityEndAt ? Math.floor(values.time.activityEndAt.valueOf() / 1000) : null,
     };
-  
+
     const result = {
       ...values,
       time,
@@ -288,11 +320,20 @@ const ActivityReportForm = () => {
         totalManualExpense,
       },
     };
-  
+
     try {
-      await add_activity_detail(result);
-      message.success("成功創建活動明細");
-  
+      if (initialData?._id) {
+        // 編輯模式
+        await update_activity_detail(initialData._id, result);
+        setModalOpen?.(false);
+        message.success("成功更新活動明細");
+        refreshData?.();
+      } else {
+        // 新增模式
+        await add_activity_detail(result);
+        message.success("成功創建活動明細");
+      }
+
       form.resetFields();
       navigate("/finance/activity-management/overview");
     } catch {
@@ -305,7 +346,7 @@ const ActivityReportForm = () => {
   return (
     <Spin spinning={isLoading}>
       <Title level={3} style={{ marginTop: 0, marginBottom: 20 }}>
-        🏷️ 新增活動明細
+        {isEditMode ? "✏️ 編輯活動明細" : "🏷️ 新增活動明細"}
       </Title>
       <Form
         size="small"

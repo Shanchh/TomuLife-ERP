@@ -606,3 +606,24 @@ def delete_activity_detail():
         return jsonify(result), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+    
+@finance_api.route("/update_activity_detail", methods=["POST"])
+@login_required
+@admin_required
+def update_activity_detail():
+    try:
+        data = request.get_json()
+        data_id = data["dataId"]
+        values = data.get("values", {})
+
+        collection = db["ActivityDetails"]
+
+        result = collection.update_one(
+            {"_id": ObjectId(data_id)},
+            {"$set": values}
+        )
+
+        return jsonify({"message": "Activity detail updated successfully", "orderID": data_id}), 200
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500

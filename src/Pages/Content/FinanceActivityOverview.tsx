@@ -4,6 +4,7 @@ import { ActivityDetail } from '../../../types';
 import { get_activity_detail } from '../../Api/FinanceApi';
 import { ReloadOutlined } from '@ant-design/icons';
 import DeleteItemBtn from '../../Component/System/DeleteItemBtn';
+import ModifyActivityDetailBtn from '../../Component/Button/ModifyActivityDetailBtn';
 
 const FinanceActivityOverview = () => {
   const { token } = theme.useToken();
@@ -108,8 +109,7 @@ const FinanceActivityOverview = () => {
       align: "center",
       render: (data: ActivityDetail) => (
         <Flex justify='center' align='center' gap={10}>
-          123
-          {/* <ModifyProductBtn data={data} handleModifyProduct={handleModifyProduct} /> */}
+          <ModifyActivityDetailBtn initialData={data} refreshData={refreshData} />
           <DeleteItemBtn type='activity_detail' data={data} handleDelete={handleDeleteActivity} />
         </Flex>
       )

@@ -136,3 +136,12 @@ export const delete_activity_detail = async (_id: string) => {
         throw err;
     }
 }
+
+export const update_activity_detail = async (dataId: string, values: any) => {
+    try {
+        const res = await axios.post("/finance/update_activity_detail", { dataId, values });
+        return res.data.data;
+    } catch (err) {
+        throw err;
+    }
+}
