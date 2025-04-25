@@ -568,3 +568,41 @@ def add_activity_detail():
         return jsonify({"message": "Activity detail created successfully", "detailID": str(result.inserted_id)}), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+    
+@finance_api.route("/get_activity_detail", methods=["GET"])
+@login_required
+@admin_required
+def get_activity_detail():
+    try:
+        collection = db["ActivityDetails"]
+        activity_detail_list = list(collection.find())
+
+        result = {
+            "code": 0,
+            "message": "Activity Detail data retrieved successfully",
+            "data": pop_objectId(activity_detail_list)
+        }
+
+        return jsonify(result), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500  
+    
+@finance_api.route("/delete_activity_detail", methods=["POST"])
+@login_required
+@admin_required
+def delete_activity_detail():
+    try:
+        data: dict = request.get_json()
+        _id = data["_id"]
+
+        collection = db["ActivityDetails"]
+        r = collection.delete_one({"_id": ObjectId(_id)})
+
+        result = {
+            "code": 0,
+            "delete_count": r.deleted_count
+        }
+
+        return jsonify(result), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500

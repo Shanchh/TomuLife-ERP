@@ -140,3 +140,53 @@ export interface SalesReport {
     };
     createdAt: number;
 }
+
+export interface ActivityDetail {
+    _id: string;
+    time: {
+      activityStartAt: number;
+      activityEndAt: number;
+    };
+    activityName: string;
+    incomes: {
+      description: string;
+      amount: number;
+    }[];
+    expenses: {
+      description: string;
+      amount: number;
+    }[];
+    sales: {
+      [productId: string]: {
+        quantity: number;
+        discountQty: number;
+        discountAmount: number;
+        trialQty: number;
+        giftQty: number;
+        totalQty: number;
+        totalPrice: number;
+      };
+    };
+    costs: {
+      [productId: string]: {
+        unitCost: number;
+        soldTotal: number;
+        tastingQty: number;
+        giftQty: number;
+        totalQty: number;
+        totalCost: number;
+      };
+    };
+    summary: {
+      totalProductRevenue: number;
+      totalProductCost: number;
+      totalManualIncome: number;
+      totalManualExpense: number;
+    };
+    creator: {
+      _id: string;
+      nickname: string;
+      email: string;
+    };
+    createAt: number;
+  }

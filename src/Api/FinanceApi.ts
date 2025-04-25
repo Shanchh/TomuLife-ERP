@@ -118,3 +118,21 @@ export const add_activity_detail = async (values: any) => {
         throw err;
     }
 };
+
+export const get_activity_detail = async () => {
+    try {
+        const res = await axios.get("/finance/get_activity_detail");
+        return res.data.data;
+    } catch (err) {
+        throw err;
+    }
+};
+
+export const delete_activity_detail = async (_id: string) => {
+    try {
+        const res = await axios.post("/finance/delete_activity_detail", { _id });
+        return res.data.data;
+    } catch (err) {
+        throw err;
+    }
+}
