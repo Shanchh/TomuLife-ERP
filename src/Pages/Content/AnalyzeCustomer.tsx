@@ -6,6 +6,7 @@ import { get_customers } from '../../Api/SystemApi';
 import { get_customer_analyze } from '../../Api/AnalyzeApi';
 import CustomerPerformanceCard from '../../Component/Card/CustomerPerformanceCard';
 import CustomerMonthlyPurchaseCard from '../../Component/Card/CustomerMonthlyPurchaseCard';
+import CustomerCRMHistoryCard from '../../Component/Card/CustomerCRMHistoryCard';
 
 const AnalyzeCustomer = () => {
     const [form] = Form.useForm();
@@ -135,6 +136,8 @@ const AnalyzeCustomer = () => {
                     />
                 </Col>
             </Row>
+
+            <CustomerCRMHistoryCard analyzeData={analyzeData} customerList={customerList}/>
         </Flex>
     )
 }

@@ -84,6 +84,7 @@ def analyze_customer_sales(customer_id):
     if not result:
         return {
             "basic": {
+                "_id": customer_id,
                 "totalAmount": 0,
                 "orderCount": 0,
                 "averageAmount": 0,
