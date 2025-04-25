@@ -19,6 +19,7 @@ import SystemProductManagement from './Pages/Content/SystemProductManagement';
 import SystemRoleManagement from './Pages/Content/SystemRoleManagement';
 import SystemUserManagement from './Pages/Content/SystemUserManagement';
 import Setting from './Pages/Main/Setting';
+import AnalyzeCustomer from './Pages/Content/AnalyzeCustomer';
 
 function App() {
   return (
@@ -42,6 +43,8 @@ function App() {
 
                 <Route path="/finance/activity-management/overview" element={<FinanceActivityOverview />} />
                 <Route path="/finance/activity-management/report" element={<FinanceActivityReport />} />
+
+                <Route path="/analyze/customer" element={<AnalyzeCustomer />} />
 
                 <Route path="/system/customer-management" element={<SystemCustomerManagement />} />
                 <Route path="/system/product-management" element={<SystemProductManagement />} />

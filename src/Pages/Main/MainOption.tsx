@@ -80,7 +80,13 @@ const MainOption: React.FC<MyMenuProps> = ({ setCollapsed }) => {
         {
             key: "/analyze",
             label: "分析",
-            icon: <LineChartOutlined />
+            icon: <LineChartOutlined />,
+            children: [
+                {
+                    key: "/analyze/customer",
+                    label: "客戶分析",
+                },
+            ]
         },
         {
             key: "/system",

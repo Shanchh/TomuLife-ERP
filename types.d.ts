@@ -144,49 +144,74 @@ export interface SalesReport {
 export interface ActivityDetail {
     _id: string;
     time: {
-      activityStartAt: number;
-      activityEndAt: number;
+        activityStartAt: number;
+        activityEndAt: number;
     };
     activityName: string;
     incomes: {
-      description: string;
-      amount: number;
+        description: string;
+        amount: number;
     }[];
     expenses: {
-      description: string;
-      amount: number;
+        description: string;
+        amount: number;
     }[];
     sales: {
-      [productId: string]: {
-        quantity: number;
-        discountQty: number;
-        discountAmount: number;
-        trialQty: number;
-        giftQty: number;
-        totalQty: number;
-        totalPrice: number;
-      };
+        [productId: string]: {
+            quantity: number;
+            discountQty: number;
+            discountAmount: number;
+            trialQty: number;
+            giftQty: number;
+            totalQty: number;
+            totalPrice: number;
+        };
     };
     costs: {
-      [productId: string]: {
-        unitCost: number;
-        soldTotal: number;
-        tastingQty: number;
-        giftQty: number;
-        totalQty: number;
-        totalCost: number;
-      };
+        [productId: string]: {
+            unitCost: number;
+            soldTotal: number;
+            tastingQty: number;
+            giftQty: number;
+            totalQty: number;
+            totalCost: number;
+        };
     };
     summary: {
-      totalProductRevenue: number;
-      totalProductCost: number;
-      totalManualIncome: number;
-      totalManualExpense: number;
+        totalProductRevenue: number;
+        totalProductCost: number;
+        totalManualIncome: number;
+        totalManualExpense: number;
     };
     creator: {
-      _id: string;
-      nickname: string;
-      email: string;
+        _id: string;
+        nickname: string;
+        email: string;
     };
     createAt: number;
-  }
+}
+
+export interface CustomerAnalyzeData {
+    basic: {
+        _id?: string;
+        averageAmount: number;
+        firstPurchase?: number;
+        lastPurchase: number | null;
+        totalAmount: number;
+        orderCount: number;
+        purchaseFrequencyDays: number | null;
+    };
+    calculateDiscount: number;
+    monthlyData: {
+        [month: string]: {
+            total: number;
+            items: {
+                productId: string;
+                name: string;
+                quantity: number;
+                unitPrice: number;
+                subtotal: number;
+            }[];
+        };
+    };
+}
