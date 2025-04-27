@@ -215,3 +215,18 @@ export interface CustomerAnalyzeData {
         };
     };
 }
+
+export interface CustomerTracking {
+    _id: string;
+    customer: string;
+    customerName: string;
+    contactDate: number;
+    contactSubject: string;
+    contactNote: string;
+    creator: {
+        _id: string;
+        nickname: string;
+        email: string;
+    };
+    createAt: number;
+}

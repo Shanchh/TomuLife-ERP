@@ -137,7 +137,7 @@ const AnalyzeCustomer = () => {
                 </Col>
             </Row>
 
-            <CustomerCRMHistoryCard analyzeData={analyzeData} customerList={customerList}/>
+            <CustomerCRMHistoryCard analyzeData={analyzeData} customerList={customerList} isLoading={isLoading}/>
         </Flex>
     )
 }

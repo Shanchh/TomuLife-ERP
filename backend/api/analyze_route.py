@@ -5,6 +5,7 @@ from datetime import datetime, timedelta
 import time
 
 from utils.auth import login_required, admin_required
+from utils.tools import pop_objectId
 
 analyze_api = Blueprint("analyze_api", __name__)
 
@@ -238,3 +239,55 @@ def calculate_customer_monthly_retail_summary(customer_id: str) -> dict:
             }
 
     return dict(sorted(monthly_summary.items(), reverse=True))
+
+@analyze_api.route("/add_customer_trackings", methods=["POST"])
+@login_required
+@admin_required
+def add_customer_trackings():
+    try:
+        data: dict = request.get_json()
+        values = data["values"]
+
+        submitter = db["Users"].find_one({"email": g.curUser.email})
+
+        insert_data = {
+            **values,
+            "creator": {
+                "_id": str(submitter["_id"]),
+                "nickname": submitter["nickname"],
+                "email": submitter["email"]
+            },
+            "createAt": int(time.time())
+        }
+
+        collection = db["CustomerTrackings"]
+
+        result = collection.insert_one(insert_data)
+
+        return jsonify({"message": "Customer tracking data created successfully", "detailID": str(result.inserted_id)}), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+    
+@analyze_api.route("/get_customer_trackings", methods=["POST"])
+@login_required
+@admin_required
+def get_customer_trackings():
+    try:
+        data: dict = request.get_json()
+        _id = data["_id"]
+
+        collection = db["CustomerTrackings"]
+
+        trackings = list(collection.find({
+            "customer": _id
+        }).sort("contactDate", -1))
+
+        result = {
+            "code": 0,
+            "message": "success",
+            "data": pop_objectId(trackings)
+        }
+
+        return jsonify(result), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500

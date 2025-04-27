@@ -1,5 +1,5 @@
 import React from 'react'
-import { Card, Flex, Spin } from 'antd'
+import { Card, Empty, Flex, Spin } from 'antd'
 import {
     BarChart,
     Bar,
@@ -10,6 +10,7 @@ import {
     ResponsiveContainer,
 } from 'recharts'
 import { CustomerAnalyzeData } from '../../../types'
+import { SmileOutlined } from '@ant-design/icons'
 
 interface Props {
     analyzeData: CustomerAnalyzeData | null
@@ -62,7 +63,12 @@ const CustomerMonthlyPurchaseCard: React.FC<Props> = ({ analyzeData, isLoading }
     return (
         <Card title="近六個月購買金額(零售價計算)" style={{ height: "100%", width: '100%', minHeight: 420 }}>
             <Flex justify="center" align="center" style={{ width: '100%', height: 300 }}>
-                {isLoading ? (
+                {analyzeData === null ? (
+                    <div style={{ textAlign: 'center', color: "gray" }}>
+                        <SmileOutlined style={{ fontSize: 20 }} />
+                        <p>沒有銷售紀錄</p>
+                    </div>
+                ) : isLoading ? (
                     <Spin size="large" />
                 ) : (
                     <ResponsiveContainer width="100%" height="100%">
@@ -73,7 +79,19 @@ const CustomerMonthlyPurchaseCard: React.FC<Props> = ({ analyzeData, isLoading }
                             margin={{ top: 0, right: 10, left: 10, bottom: 0 }}
                         >
                             <XAxis type="number" />
-                            <YAxis dataKey="month" type="category" />
+                            <YAxis
+                                dataKey="month"
+                                type="category"
+                                tickFormatter={(month) => {
+                                    const thisMonth = chartData.find(item => item.month === month);
+                                    const total = thisMonth
+                                        ? Object.keys(thisMonth)
+                                            .filter(key => key !== 'month')
+                                            .reduce((sum, key) => sum + Number(thisMonth[key]), 0)
+                                        : 0;
+                                    return `${month} (${total.toLocaleString()})`;
+                                }}
+                            />
                             <Tooltip />
                             <Legend />
                             {productNames.map((name, index) => (
