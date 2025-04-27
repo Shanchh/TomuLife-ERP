@@ -15,6 +15,23 @@ const CustomerPerformanceCard: React.FC<Props> = ({ analyzeData, isLoading }) =>
     const discountPercent = (discount * 100).toFixed(1)
     const discountColor = discount >= 0.8 ? 'green' : discount >= 0.6 ? 'orange' : 'red'
 
+    const sumOfTop3 = Object.entries(analyzeData?.monthlyData || {})
+        .sort(([a], [b]) => b.localeCompare(a))
+        .filter(([_, data]) => (data.total || 0) > 0)
+        .slice(0, 3)
+        .reduce((sum, [_, data]) => sum + (data.total || 0), 0);
+
+    const getCustomerLevel = (sumOfTop3: number): string => {
+        if (sumOfTop3 >= 100000) return "A";
+        if (sumOfTop3 >= 60000) return "B";
+        if (sumOfTop3 >= 30000) return "C";
+        if (sumOfTop3 >= 10000) return "D";
+        if (sumOfTop3 > 0) return "E";
+        return "F";
+    };
+
+    const level = getCustomerLevel(sumOfTop3);
+
     return (
         <Card title="銷售表現" style={{ width: "100%", minHeight: 420 }}>
             <Flex justify="center" align="center" style={{ width: "100%" }}>
@@ -26,7 +43,7 @@ const CustomerPerformanceCard: React.FC<Props> = ({ analyzeData, isLoading }) =>
                     <Flex vertical style={{ width: "100%" }} gap={40}>
                         <Row gutter={16} style={{ height: 65, width: "100%" }}>
                             <Col span={8}>
-                                <Statistic title="客戶等級" value={"A級"} valueStyle={{ fontWeight: 'bold' }} />
+                                <Statistic title="客戶等級" value={`${level}級客戶`} valueStyle={{ fontWeight: 'bold' }} />
                             </Col>
                             <Col span={8}>
                                 <Statistic
