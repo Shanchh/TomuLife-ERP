@@ -230,3 +230,11 @@ export interface CustomerTracking {
     };
     createAt: number;
 }
+
+export interface InventoryData {
+    inventoryQty: number;
+    lastPurchaseDate: number;
+    productId: string;
+    productName: string;
+    retailPrice: number;
+}

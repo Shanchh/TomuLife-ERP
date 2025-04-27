@@ -145,3 +145,12 @@ export const update_activity_detail = async (dataId: string, values: any) => {
         throw err;
     }
 }
+
+export const get_inventory_details = async () => {
+    try {
+        const res = await axios.get("/finance/get_inventory_details");
+        return res.data.data;
+    } catch (err) {
+        throw err;
+    }
+};

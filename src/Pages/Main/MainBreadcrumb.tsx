@@ -5,6 +5,7 @@ import { useLocation, Link } from "react-router-dom";
 const breadcrumbNameMap: Record<string, string> = {
     "/": "首頁",
     "/finance": "帳務",
+    "/finance/Inventory-overview": "庫存總覽",
     "/finance/purchase-management": "進貨管理",
     "/finance/purchase-management/statistics": "進貨統計",
     "/finance/purchase-management/report": "進貨申報",

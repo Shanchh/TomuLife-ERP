@@ -627,3 +627,71 @@ def update_activity_detail():
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+    
+@finance_api.route("/get_inventory_details", methods=["GET"])
+@login_required
+@admin_required
+def get_inventory_details():
+    try:
+        product_collection = db["Products"]
+        purchase_collection = db["PurchaseOrders"]
+        sales_collection = db["SalesReport"]
+
+        products = list(product_collection.find({}))
+
+        inventory_data = {}
+
+        for product in products:
+            product_id = str(product["_id"])
+            inventory_data[product_id] = {
+                "productId": product_id,
+                "productName": product.get("productName", "未知商品"),
+                "retailPrice": product.get("retailPrice", 0),
+                "inventoryQty": 0,
+                "lastPurchaseDate": None,
+            }
+
+        # 處理進貨資料
+        purchases = list(purchase_collection.find({}))
+        for purchase in purchases:
+            purchase_date = purchase.get("purchaseAt", 0)
+            for product_id, detail in purchase.get("products", {}).items():
+                if product_id not in inventory_data:
+                    continue
+
+                # 更新最近一次進貨時間
+                current_last_purchase = inventory_data[product_id]["lastPurchaseDate"]
+                if current_last_purchase is None or purchase_date > current_last_purchase:
+                    inventory_data[product_id]["lastPurchaseDate"] = purchase_date
+
+                # 把箱數轉成瓶數
+                purchase_bottles = int(detail.get("purchaseQuantityBottles", 0))
+                purchase_boxes = int(detail.get("purchaseQuantityBoxes", 0))
+                
+                bottles_per_box = int(product_collection.find_one({"_id": ObjectId(product_id)}).get("bottlesPerBox", 1))
+                total_bottles = purchase_bottles + (purchase_boxes * bottles_per_box)
+
+                inventory_data[product_id]["inventoryQty"] += total_bottles
+
+        # 處理銷售資料扣除已售出的數量
+        sales = list(sales_collection.find({}))
+        for sale in sales:
+            products_in_sale = sale.get("productSection", {}).get("products", {})
+            for product_id, detail in products_in_sale.items():
+                if product_id not in inventory_data:
+                    continue
+
+                quantity = int(detail.get("quantity", 0))
+                inventory_data[product_id]["inventoryQty"] -= quantity
+
+        product_numbers = { str(p["_id"]): p.get("number", 0) for p in products }
+        result = sorted(inventory_data.values(), key=lambda x: product_numbers.get(x["productId"], 0))
+
+        return jsonify({
+            "code": 0,
+            "message": "success",
+            "data": result
+        }), 200
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500

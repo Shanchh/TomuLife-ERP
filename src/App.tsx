@@ -20,6 +20,7 @@ import SystemRoleManagement from './Pages/Content/SystemRoleManagement';
 import SystemUserManagement from './Pages/Content/SystemUserManagement';
 import Setting from './Pages/Main/Setting';
 import AnalyzeCustomer from './Pages/Content/AnalyzeCustomer';
+import InventoryOverview from './Pages/Content/InventoryOverview';
 
 function App() {
   return (
@@ -32,6 +33,8 @@ function App() {
             <Route element={<ProtectedRoute />}>
               <Route path="/" element={<Interface />}>
                 <Route path="/" element={<Home />} />
+
+                <Route path="/finance/Inventory-overview" element={<InventoryOverview />} />
 
                 <Route path="/finance/purchase-management/statistics" element={<FinancePurchaseStatistics />} />
                 <Route path="/finance/purchase-management/report" element={<FinancePurchaseReport />} />

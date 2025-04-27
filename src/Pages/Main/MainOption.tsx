@@ -1,6 +1,6 @@
 import { Menu, MenuProps } from "antd";
 import React from "react";
-import { HomeOutlined, SettingOutlined, AccountBookOutlined, LineChartOutlined, ToolOutlined } from "@ant-design/icons";
+import { HomeOutlined, SettingOutlined, AccountBookOutlined, LineChartOutlined, ToolOutlined, ContainerOutlined } from "@ant-design/icons";
 import { useLocation, useNavigate } from "react-router-dom";
 import { isMobile } from "react-device-detect";
 import { useAuth } from "../../Auth/AuthProvider";
@@ -25,6 +25,10 @@ const MainOption: React.FC<MyMenuProps> = ({ setCollapsed }) => {
             label: "帳務",
             icon: <AccountBookOutlined />,
             children: [
+                {
+                    key: "/finance/Inventory-overview",
+                    label: "庫存總覽",
+                },
                 {
                     key: "/finance/purchase-management",
                     label: "進貨管理",
