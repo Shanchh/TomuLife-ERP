@@ -8,6 +8,7 @@ import TaxBadge from '../../Component/TaxBadge';
 import DeleteItemBtn from '../../Component/System/DeleteItemBtn';
 import ModifySalesReportBtn from '../../Component/Button/ModifySalesReportBtn';
 import { locations } from '../../Constants/locations';
+import ExportInvoiceBtn from '../Button/ExportInvoiceBtn';
 
 interface SalesReportTableProps {
   data: SalesReport[];
@@ -123,6 +124,7 @@ const SalesReportTable: React.FC<SalesReportTableProps> = ({
       align: "center",
       render: (record: SalesReport) => (
         <Flex gap={10} justify="center" align="center">
+          <ExportInvoiceBtn data={record} productList={productList}/>
           <Tooltip title="編輯銷售明細">
             <ModifySalesReportBtn
               initialData={record}
