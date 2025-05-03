@@ -26,7 +26,6 @@ const ExportInvoiceBtn: React.FC<ExportInvoiceBtnProps> = ({ data, productList }
                 width={700}
                 onCancel={() => setModalOpen(false)}
                 style={{ top: 100, minWidth: 700 }}
-                bodyStyle={{ overflowX: 'auto' }}
                 footer={null}
                 title="發票"
             >
