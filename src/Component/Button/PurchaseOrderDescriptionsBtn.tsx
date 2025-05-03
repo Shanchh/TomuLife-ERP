@@ -54,6 +54,12 @@ const PurchaseOrderDescriptionsBtn: React.FC<PurchaseOrderDescriptionsBtnProps> 
             render: (text: number) => `$${text.toLocaleString()}`,
         },
         {
+            title: "箱入數",
+            dataIndex: "bottlesPerBox",
+            key: "bottlesPerBox",
+            align: "right",
+        },
+        {
             title: "小計",
             dataIndex: "itemAmount",
             key: "itemAmount",
@@ -81,7 +87,7 @@ const PurchaseOrderDescriptionsBtn: React.FC<PurchaseOrderDescriptionsBtnProps> 
                     </div>
                 }
                 open={modalOpen}
-                width={500}
+                width={600}
                 onCancel={() => setModalOpen(false)}
                 style={{ top: 100 }}
                 footer={null}

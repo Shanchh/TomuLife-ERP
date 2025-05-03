@@ -49,6 +49,7 @@ const PurchaseReportForm: React.FC<PurchaseReportFormProps> = ({ initialData, se
                 purchaseQuantityBottles: orderProduct.purchaseQuantityBottles,
                 purchaseQuantityBoxes: orderProduct.purchaseQuantityBoxes,
                 purchaseAmount: total,
+                bottlesPerBox: product.bottlesPerBox || 0
             };
         });
 
@@ -134,7 +135,7 @@ const PurchaseReportForm: React.FC<PurchaseReportFormProps> = ({ initialData, se
     const handleSubmit = async () => {
         setIsSubmitLoading(true);
         const values = form.getFieldsValue();
-
+        console.log(values);
         if (selectedProducts.length === 0) {
             message.error("請至少選擇一個產品");
             setIsSubmitLoading(false);
@@ -149,6 +150,7 @@ const PurchaseReportForm: React.FC<PurchaseReportFormProps> = ({ initialData, se
                     transformedData[product._id] = {
                         purchaseQuantityBottles: parseInt(item.purchaseQuantityBottles || 0, 10),
                         purchaseQuantityBoxes: parseInt(item.purchaseQuantityBoxes || 0, 10),
+                        bottlesPerBox: parseInt(item.bottlesPerBox || 0, 10)
                     };
                 }
             });
@@ -229,7 +231,7 @@ const PurchaseReportForm: React.FC<PurchaseReportFormProps> = ({ initialData, se
                                 <Button danger size="small" onClick={() => handleRemoveProduct(product._id)}>移除</Button>
                             </Flex>
                             <Row gutter={16}>
-                                <Col xs={24} sm={24} md={8}>
+                                <Col xs={24} sm={24} md={12} lg={6}>
                                     <Form.Item
                                         label="進貨數量 (瓶)"
                                         name={["products", index, "purchaseQuantityBottles"]}
@@ -245,7 +247,7 @@ const PurchaseReportForm: React.FC<PurchaseReportFormProps> = ({ initialData, se
                                     </Form.Item>
                                 </Col>
 
-                                <Col xs={24} sm={24} md={8}>
+                                <Col xs={24} sm={24} md={12} lg={6}>
                                     <Form.Item
                                         label="進貨數量 (箱)"
                                         name={["products", index, "purchaseQuantityBoxes"]}
@@ -261,7 +263,17 @@ const PurchaseReportForm: React.FC<PurchaseReportFormProps> = ({ initialData, se
                                     </Form.Item>
                                 </Col>
 
-                                <Col xs={24} sm={24} md={8}>
+                                <Col xs={24} sm={24} md={6} lg={4}>
+                                    <Form.Item
+                                        label="箱入數"
+                                        name={["products", index, "bottlesPerBox"]}
+                                        initialValue={product.bottlesPerBox || 0}
+                                    >
+                                        <Input type='number'/>
+                                    </Form.Item>
+                                </Col>
+
+                                <Col xs={24} sm={24} md={18} lg={8}>
                                     <Form.Item label="金額">
                                         <Input type='number' value={amounts[product._id] || 0} disabled />
                                     </Form.Item>

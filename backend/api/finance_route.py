@@ -39,6 +39,7 @@ def purchase_orders():
 
             quantity_bottles = int(product_data.get("purchaseQuantityBottles", 0))
             quantity_boxes = int(product_data.get("purchaseQuantityBoxes", 0))
+            bottles_per_box = int(product_data.get("bottlesPerBox", 0))
 
             cost_per_bottle = int(product_info.get("costPerBottle", 0) or 0)
             cost_per_box = int(product_info.get("costPerBox", 0) or 0)
@@ -51,6 +52,7 @@ def purchase_orders():
                 "purchaseQuantityBottles": quantity_bottles,
                 "costPerBox": cost_per_box,
                 "purchaseQuantityBoxes": quantity_boxes,
+                "bottlesPerBox": bottles_per_box,
                 "itemAmount": item_amount
             }
 

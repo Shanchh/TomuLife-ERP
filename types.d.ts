@@ -64,6 +64,7 @@ export interface PurchaseProduct {
     purchaseQuantityBottles: number;
     costPerBox: number;
     purchaseQuantityBoxes: number;
+    bottlesPerBox: number;
     itemAmount: number;
 }
 
