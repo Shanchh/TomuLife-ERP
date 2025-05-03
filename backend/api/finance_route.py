@@ -661,17 +661,15 @@ def get_inventory_details():
                 if product_id not in inventory_data:
                     continue
 
+                bottles_per_box = int(detail.get("bottlesPerBox", 1))
+                purchase_bottles = int(detail.get("purchaseQuantityBottles", 0))
+                purchase_boxes = int(detail.get("purchaseQuantityBoxes", 0))
+                total_bottles = purchase_bottles + (purchase_boxes * bottles_per_box)
+
                 # 更新最近一次進貨時間
                 current_last_purchase = inventory_data[product_id]["lastPurchaseDate"]
                 if current_last_purchase is None or purchase_date > current_last_purchase:
                     inventory_data[product_id]["lastPurchaseDate"] = purchase_date
-
-                # 把箱數轉成瓶數
-                purchase_bottles = int(detail.get("purchaseQuantityBottles", 0))
-                purchase_boxes = int(detail.get("purchaseQuantityBoxes", 0))
-                
-                bottles_per_box = int(product_collection.find_one({"_id": ObjectId(product_id)}).get("bottlesPerBox", 1))
-                total_bottles = purchase_bottles + (purchase_boxes * bottles_per_box)
 
                 inventory_data[product_id]["inventoryQty"] += total_bottles
 
