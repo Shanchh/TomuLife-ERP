@@ -304,6 +304,12 @@ def get_all_customer_tier():
 
         sales_collection = db["SalesReport"]
         customer_collection = db["Customers"]
+        product_collection = db["Products"]
+
+        product_map = {
+            str(p["_id"]): float(p.get("retailPrice", 0))
+            for p in product_collection.find({})
+        }
 
         customers = list(customer_collection.find({}))
         customer_stats = {
@@ -327,7 +333,16 @@ def get_all_customer_tier():
                 continue
 
             purchase_date = doc["basicInfo"]["purchaseDate"]
-            amount = doc.get("billing", {}).get("receivableAmount", 0)
+            products = doc.get("productSection", {}).get("products", {})
+
+            amount = 0
+            for pid, p in products.items():
+                try:
+                    qty = float(p.get("quantity", 0))
+                    unit_price = float(product_map.get(pid, 0))
+                    amount += qty * unit_price
+                except (ValueError, TypeError):
+                    continue
 
             if purchase_date >= one_month_ago:
                 customer_stats[customer_id]["oneMonth"]["amount"] += amount
