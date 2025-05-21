@@ -87,7 +87,7 @@ const ModifyCustomerBtn: React.FC<ModifyRoleBtnProps> = ({ data, handleModifyCus
 
                     <Flex gap={10}>
                         <Form.Item
-                            label={"縣市代號"}
+                            label={"地區代號"}
                             name={"areaCode"}
                             rules={[{ required: true }]}
                             style={{ width: '50%' }}
@@ -107,7 +107,7 @@ const ModifyCustomerBtn: React.FC<ModifyRoleBtnProps> = ({ data, handleModifyCus
                         </Form.Item>
 
                         <Form.Item
-                            label={"會計科目"}
+                            label={"客戶編號"}
                             name={"bookkeeping"}
                             rules={[{ required: true }]}
                             style={{ width: '50%' }}

@@ -18,12 +18,12 @@ const CustomerListTable: React.FC<CustomerListTableProps> = ({ data, isLoading, 
 
     const columns: TableProps["columns"] = [
         {
-            title: "縣市代號",
+            title: "地區代號",
             align: "center",
             render: (data: Customer) => <span>{`${data.areaCode}-${locations[data.areaCode].name}`}</span>
         },
         {
-            title: "會計科目",
+            title: "客戶編號",
             dataIndex: "bookkeeping",
             align: "center",
             render: (bookkeeping: string) => bookkeeping || "-"

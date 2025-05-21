@@ -91,7 +91,7 @@ const SystemCustomerManagement = () => {
           <Col>
             <Form.Item name="areaCode">
               <Flex justify="start" align="center" gap={10}>
-                <span style={{ whiteSpace: "nowrap" }}>縣市代碼:</span>
+                <span style={{ whiteSpace: "nowrap" }}>地區代號:</span>
                 <Select
                   showSearch
                   allowClear
@@ -124,8 +124,8 @@ const SystemCustomerManagement = () => {
           <Col>
             <Form.Item name="bookkeeping">
               <Flex justify="start" align="center" gap={10}>
-                <span style={{ whiteSpace: "nowrap" }}>會計科目:</span>
-                <Input placeholder="請輸入會計科目" prefix={<ProfileOutlined />} style={{ width: 280 }} />
+                <span style={{ whiteSpace: "nowrap" }}>客戶編號:</span>
+                <Input placeholder="請輸入客戶編號" prefix={<ProfileOutlined />} style={{ width: 280 }} />
               </Flex>
             </Form.Item>
           </Col>

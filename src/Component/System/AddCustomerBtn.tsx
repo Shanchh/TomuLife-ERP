@@ -85,7 +85,7 @@ const AddCustomerBtn: React.FC<AddCustomerBtnProps> = ({ refreshData }) => {
 
                     <Flex gap={10}>
                         <Form.Item
-                            label={"縣市代號"}
+                            label={"地區代號"}
                             name={"areaCode"}
                             rules={[{ required: true }]}
                             style={{ width: '50%' }}
@@ -105,12 +105,12 @@ const AddCustomerBtn: React.FC<AddCustomerBtnProps> = ({ refreshData }) => {
                         </Form.Item>
 
                         <Form.Item
-                            label={"會計科目"}
+                            label={"客戶編號"}
                             name={"bookkeeping"}
                             rules={[{ required: true }]}
                             style={{ width: '50%' }}
                         >
-                            <Input type="number" autoComplete="off" placeholder="請輸入會計科目" />
+                            <Input type="number" autoComplete="off" placeholder="請輸入客戶編號" />
                         </Form.Item>
                     </Flex>
 

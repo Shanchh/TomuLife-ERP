@@ -54,7 +54,7 @@ const SalesReportTable: React.FC<SalesReportTableProps> = ({
       ),
     },
     {
-      title: "編號",
+      title: "地區代號",
       dataIndex: ["basicInfo", "areaCode"],
       align: "center",
       render: (code: string) => locations[code]?.code + "-" + locations[code]?.name || code || "-"
@@ -65,7 +65,7 @@ const SalesReportTable: React.FC<SalesReportTableProps> = ({
       align: "center",
     },
     {
-      title: "會計科目",
+      title: "客戶編號",
       dataIndex: ["basicInfo", "customerBookkeeping"],
       align: "center",
     },
