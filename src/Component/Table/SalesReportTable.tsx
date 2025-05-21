@@ -1,5 +1,5 @@
-import React from 'react';
-import { Table, TableColumnsType, Flex, Tooltip } from 'antd';
+import React, { useState } from 'react';
+import { Table, TableColumnsType, Flex, Tooltip, Modal } from 'antd';
 import { SalesReport, Product, Customer } from '../../../types';
 import SalesStatusTags from '../../Component/SalesStatusTags';
 import SalesReportDescriptionsBtn from '../../Component/Button/SalesReportDescriptionsBtn';
@@ -9,6 +9,8 @@ import DeleteItemBtn from '../../Component/System/DeleteItemBtn';
 import ModifySalesReportBtn from '../../Component/Button/ModifySalesReportBtn';
 import { locations } from '../../Constants/locations';
 import ExportInvoiceBtn from '../Button/ExportInvoiceBtn';
+import { TableRowSelection } from 'antd/es/table/interface';
+import ExportMultipleInvoiceModal from '../ExportMultipleInvoiceModal';
 
 interface SalesReportTableProps {
   data: SalesReport[];
@@ -33,6 +35,40 @@ const SalesReportTable: React.FC<SalesReportTableProps> = ({
   onPageChange,
   refreshData
 }) => {
+  const [multiExportOpen, setMultiExportOpen] = useState(false);
+  const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
+
+  const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
+    const selectedData = data.filter((item) => newSelectedRowKeys.includes(item._id));
+    const uniqueCustomers = new Set(selectedData.map((item) => item.basicInfo.customerBookkeeping));
+
+    if (uniqueCustomers.size > 1) {
+      Modal.warning({
+        title: '只能選擇相同客戶的出貨單',
+        content: '請重新勾選。',
+      });
+      return;
+    }
+
+    setSelectedRowKeys(newSelectedRowKeys);
+  };
+
+  const rowSelection: TableRowSelection<SalesReport> = {
+    selectedRowKeys,
+    onChange: onSelectChange,
+    columnWidth: 60,
+    selections: [
+      Table.SELECTION_NONE,
+      {
+        key: 'multi-export',
+        text: '批量收據明細',
+        onSelect: () => {
+          if (selectedRowKeys.length === 0) return;
+          setMultiExportOpen(true);
+        },
+      },
+    ],
+  };
   const handleDelete = () => {
     refreshData();
   };
@@ -126,7 +162,7 @@ const SalesReportTable: React.FC<SalesReportTableProps> = ({
       width: 170,
       render: (record: SalesReport) => (
         <Flex gap={10} justify="center" align="center">
-          <ExportInvoiceBtn data={record} productList={productList}/>
+          <ExportInvoiceBtn data={record} productList={productList} />
           <Tooltip title="編輯銷售明細">
             <ModifySalesReportBtn
               initialData={record}
@@ -144,21 +180,32 @@ const SalesReportTable: React.FC<SalesReportTableProps> = ({
   ];
 
   return (
-    <Table
-      tableLayout="fixed"
-      loading={loading}
-      bordered
-      columns={columns}
-      dataSource={data}
-      pagination={{
-        current: currentPage,
-        pageSize: currentPageSize,
-        total,
-        showSizeChanger: true,
-        position: ["bottomLeft"],
-        onChange: onPageChange,
-      }}
-    />
+    <>
+      <Table
+        rowSelection={rowSelection}
+        rowKey={(record) => record._id}
+        tableLayout="fixed"
+        loading={loading}
+        bordered
+        columns={columns}
+        dataSource={data}
+        pagination={{
+          current: currentPage,
+          pageSize: currentPageSize,
+          total,
+          showSizeChanger: true,
+          position: ["bottomLeft"],
+          onChange: onPageChange,
+        }}
+      />
+
+      <ExportMultipleInvoiceModal
+        open={multiExportOpen}
+        onClose={() => setMultiExportOpen(false)}
+        reports={data.filter((item) => selectedRowKeys.includes(item._id))}
+        productList={productList}
+      />
+    </>
   );
 };
 
