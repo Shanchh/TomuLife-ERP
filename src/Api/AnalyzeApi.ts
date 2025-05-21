@@ -26,3 +26,12 @@ export const get_customer_trackings = async (_id: string) => {
         throw err;
     }
 };
+
+export const get_all_customer_tier = async () => {
+    try {
+        const res = await axios.get("/analyze/get_all_customer_tier");
+        return res.data.data;
+    } catch (err) {
+        throw err;
+    }
+};

@@ -239,3 +239,18 @@ export interface InventoryData {
     productName: string;
     retailPrice: number;
 }
+
+export interface CustomerTierStats {
+  _id: string;
+  name: string;
+  areaCode: string;
+  bookkeeping: string;
+  oneMonth: PeriodStats;
+  threeMonth: PeriodStats;
+  sixMonth: PeriodStats;
+}
+
+export interface PeriodStats {
+  amount: number;
+  count: number;
+}

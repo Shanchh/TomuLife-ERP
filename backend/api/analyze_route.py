@@ -291,3 +291,67 @@ def get_customer_trackings():
         return jsonify(result), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+    
+@analyze_api.route("/get_all_customer_tier", methods=["GET"])
+@login_required
+@admin_required
+def get_all_customer_tier():
+    try:
+        now_ts = int(time.time())
+        one_month_ago = now_ts - 30 * 24 * 60 * 60
+        three_months_ago = now_ts - 90 * 24 * 60 * 60
+        six_months_ago = now_ts - 180 * 24 * 60 * 60
+
+        sales_collection = db["SalesReport"]
+        customer_collection = db["Customers"]
+
+        customers = list(customer_collection.find({}))
+        customer_stats = {
+            str(c["_id"]): {
+                "_id": str(c["_id"]),
+                "name": c.get("customerName", "未知客戶"),
+                "areaCode": c.get("areaCode", "-"),
+                "bookkeeping": c.get("bookkeeping", "-"),
+                "oneMonth": {"amount": 0, "count": 0},
+                "threeMonth": {"amount": 0, "count": 0},
+                "sixMonth": {"amount": 0, "count": 0}
+            }
+            for c in customers
+        }
+
+        for doc in sales_collection.find({
+            "basicInfo.purchaseDate": {"$gte": six_months_ago}
+        }):
+            customer_id = doc["basicInfo"]["customer"]
+            if customer_id not in customer_stats:
+                continue
+
+            purchase_date = doc["basicInfo"]["purchaseDate"]
+            amount = doc.get("billing", {}).get("receivableAmount", 0)
+
+            if purchase_date >= one_month_ago:
+                customer_stats[customer_id]["oneMonth"]["amount"] += amount
+                customer_stats[customer_id]["oneMonth"]["count"] += 1
+
+            if purchase_date >= three_months_ago:
+                customer_stats[customer_id]["threeMonth"]["amount"] += amount
+                customer_stats[customer_id]["threeMonth"]["count"] += 1
+
+            if purchase_date >= six_months_ago:
+                customer_stats[customer_id]["sixMonth"]["amount"] += amount
+                customer_stats[customer_id]["sixMonth"]["count"] += 1
+
+        sorted_data = sorted(
+            customer_stats.values(),
+            key=lambda c: c["threeMonth"]["amount"],
+            reverse=True
+        )
+
+        return jsonify({
+            "code": 0,
+            "message": "success",
+            "data": sorted_data
+        }), 200
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
