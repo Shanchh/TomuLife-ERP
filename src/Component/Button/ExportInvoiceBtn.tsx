@@ -40,7 +40,7 @@ const ExportInvoiceBtn: React.FC<ExportInvoiceBtnProps> = ({ data, productList }
                             </span>
                         </Flex>
                         <Flex gap={20} style={{ padding: "0px 8px" }}>
-                            <span style={{ fontSize: 16 }}>會計科目: {data.basicInfo.customerBookkeeping}</span>
+                            <span style={{ fontSize: 16 }}>客戶編號: {data.basicInfo.customerBookkeeping}</span>
                             <span style={{ fontSize: 16 }}>應收帳款-{data.basicInfo.customerName}</span>
                         </Flex>
 
