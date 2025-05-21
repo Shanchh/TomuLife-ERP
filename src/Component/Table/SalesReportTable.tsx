@@ -96,6 +96,7 @@ const SalesReportTable: React.FC<SalesReportTableProps> = ({
       title: "配送",
       dataIndex: "delivery",
       align: "center",
+      width: 100,
       render: (delivery: any) => {
         const methodLabel = delivery?.deliveryMethod === "hsinchuLogistics" ? "新竹貨運" : "自送";
         const boxes = delivery?.deliveryBoxes ?? "-";
@@ -122,6 +123,7 @@ const SalesReportTable: React.FC<SalesReportTableProps> = ({
     {
       title: "操作",
       align: "center",
+      width: 170,
       render: (record: SalesReport) => (
         <Flex gap={10} justify="center" align="center">
           <ExportInvoiceBtn data={record} productList={productList}/>
@@ -144,7 +146,6 @@ const SalesReportTable: React.FC<SalesReportTableProps> = ({
   return (
     <Table
       tableLayout="fixed"
-      scroll={{ x: "max-content" }}
       loading={loading}
       bordered
       columns={columns}
