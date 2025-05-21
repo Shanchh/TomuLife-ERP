@@ -18,6 +18,7 @@ const breadcrumbNameMap: Record<string, string> = {
     "/finance/activity-management/overview": "活動總覽",
     "/finance/activity-management/report": "活動申報",
     "/analyze": "分析",
+    "/analyze/customer-tier-overview": "分級總覽",
     "/analyze/customer": "客戶分析",
     "/system": "系統",
     "/system/customer-management": "客戶管理",

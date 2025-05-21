@@ -87,6 +87,10 @@ const MainOption: React.FC<MyMenuProps> = ({ setCollapsed }) => {
             icon: <LineChartOutlined />,
             children: [
                 {
+                    key: "/analyze/customer-tier-overview",
+                    label: "分級總覽",
+                },
+                {
                     key: "/analyze/customer",
                     label: "客戶分析",
                 },

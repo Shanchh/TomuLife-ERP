@@ -21,6 +21,7 @@ import SystemUserManagement from './Pages/Content/SystemUserManagement';
 import Setting from './Pages/Main/Setting';
 import AnalyzeCustomer from './Pages/Content/AnalyzeCustomer';
 import InventoryOverview from './Pages/Content/InventoryOverview';
+import CustomerTierOverview from './Pages/Content/CustomerTierOverview';
 
 function App() {
   return (
@@ -47,6 +48,7 @@ function App() {
                 <Route path="/finance/activity-management/overview" element={<FinanceActivityOverview />} />
                 <Route path="/finance/activity-management/report" element={<FinanceActivityReport />} />
 
+                <Route path="/analyze/customer-tier-overview" element={<CustomerTierOverview />} />
                 <Route path="/analyze/customer" element={<AnalyzeCustomer />} />
 
                 <Route path="/system/customer-management" element={<SystemCustomerManagement />} />
