@@ -186,7 +186,7 @@ const SalesReportForm: React.FC<SalesReportFormProps> = ({ initialData, refreshD
     return (
         <Spin spinning={isLoading}>
             <Title level={3} style={{ marginTop: 0, marginBottom: 20 }}>
-                🛒 {initialData ? "編輯銷貨訂單" : "新增進貨訂單"}
+                🛒 {initialData ? "編輯銷貨訂單" : "新增銷貨訂單"}
             </Title>
             <Form size={"small"} form={form} layout="vertical" onFinish={handleSubmit}>
                 {/* 銷貨資訊 */}
