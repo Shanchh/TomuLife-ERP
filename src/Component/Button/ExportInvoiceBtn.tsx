@@ -51,6 +51,9 @@ const ExportInvoiceBtn: React.FC<ExportInvoiceBtnProps> = ({ data, productList }
                             <span style={{ flex: 1, fontSize: 16, display: 'flex', justifyContent: 'center', alignItems: 'center', borderRight: '1px solid #ccc' }}>
                                 品項
                             </span>
+                            <span style={{ width: 100, fontSize: 16, display: 'flex', justifyContent: 'center', alignItems: 'center', borderRight: '1px solid #ccc' }}>
+                                數量
+                            </span>
                             <span style={{ width: 130, fontSize: 16, display: 'flex', justifyContent: 'center', alignItems: 'center', borderRight: '1px solid #ccc' }}>
                                 金額(未稅)
                             </span>
@@ -70,6 +73,9 @@ const ExportInvoiceBtn: React.FC<ExportInvoiceBtnProps> = ({ data, productList }
                                     </span>
                                     <span style={{ flex: 1, fontSize: 14, display: 'flex', justifyContent: 'center', alignItems: 'center', borderRight: '1px solid #eee' }}>
                                         {productName}
+                                    </span>
+                                    <span style={{ width: 100, fontSize: 14, display: 'flex', justifyContent: 'center', alignItems: 'center', borderRight: '1px solid #eee' }}>
+                                        {productInfo.quantity}
                                     </span>
                                     <span style={{ width: 130, fontSize: 14, display: 'flex', justifyContent: 'center', alignItems: 'center', borderRight: '1px solid #eee' }}>
                                         {(Number(productInfo.price) * Number(productInfo.quantity)).toLocaleString()}
