@@ -33,7 +33,7 @@ const ExportInvoiceBtn: React.FC<ExportInvoiceBtnProps> = ({ data, productList }
                     <Flex vertical style={{ border: '1px solid black', padding: '10px 0', width: 650 }}>
                         <Flex vertical justify='center' align='center' style={{ width: "100%" }}>
                             <span style={{ fontSize: 24, fontWeight: 500 }}>
-                                孩島計畫有限公司
+                                孩島計畫有限公司（望山穗）
                             </span>
                             <span style={{ fontSize: 20, fontWeight: 500 }}>
                                 {dateTitle}
@@ -46,10 +46,10 @@ const ExportInvoiceBtn: React.FC<ExportInvoiceBtnProps> = ({ data, productList }
 
                         <Flex style={{ width: '100%', borderTop: '2px solid black', borderBottom: '2px solid black' }}>
                             <span style={{ width: 100, fontSize: 16, display: 'flex', justifyContent: 'center', alignItems: 'center', borderRight: '1px solid #ccc' }}>
-                                傳票日期
+                                出貨日期
                             </span>
                             <span style={{ flex: 1, fontSize: 16, display: 'flex', justifyContent: 'center', alignItems: 'center', borderRight: '1px solid #ccc' }}>
-                                摘要
+                                品項
                             </span>
                             <span style={{ width: 130, fontSize: 16, display: 'flex', justifyContent: 'center', alignItems: 'center', borderRight: '1px solid #ccc' }}>
                                 金額(未稅)
@@ -96,7 +96,7 @@ const ExportInvoiceBtn: React.FC<ExportInvoiceBtnProps> = ({ data, productList }
                                 <span style={{ fontSize: 16 }}>
                                     匯款抬頭: 孩島計畫有限公司
                                     <br />
-                                    匯款銀行: 元大銀行(806)
+                                    匯款銀行: 元大銀行 北投分行(806)
                                     <br />
                                     匯款帳號: 21212 0000 98889
                                     <br />
