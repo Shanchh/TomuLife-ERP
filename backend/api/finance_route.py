@@ -28,7 +28,7 @@ def purchase_orders():
             return jsonify({"error": f"Missing required fields: {', '.join(missing_fields)}"}), 400
 
         product_details = {}
-        countAmount = 0
+        countAmount = 0.0
 
         # 建構產品資料
         for product_id, product_data in products.items():
@@ -41,10 +41,11 @@ def purchase_orders():
             quantity_boxes = int(product_data.get("purchaseQuantityBoxes", 0))
             bottles_per_box = int(product_data.get("bottlesPerBox", 0))
 
-            cost_per_bottle = int(product_info.get("costPerBottle", 0) or 0)
-            cost_per_box = int(product_info.get("costPerBox", 0) or 0)
+            cost_per_bottle = float(product_info.get("costPerBottle", 0) or 0)
+            cost_per_box = float(product_info.get("costPerBox", 0) or 0)
 
             item_amount = (cost_per_bottle * quantity_bottles) + (cost_per_box * quantity_boxes)
+            item_amount = round(item_amount, 2)
 
             product_details[product_id] = {
                 "productID": product_id,
@@ -58,16 +59,18 @@ def purchase_orders():
 
             countAmount += item_amount
 
+        countAmount = round(countAmount, 2)
+
         # 確保 totalAmount 與計算結果一致
-        if countAmount != total_amount:
-            return jsonify({"error": "Total amount mismatch: " + str(countAmount)})
+        if round(float(total_amount), 2) != countAmount:
+            return jsonify({"error": f"Total amount mismatch: {countAmount} ≠ {total_amount}"}), 400
 
         # 插入進貨訂單
         collection = db["PurchaseOrders"]
         insert_data = {
             "purchaseAt": purchase_date,
             "products": product_details,
-            "totalAmount": total_amount,
+            "totalAmount": countAmount,
             "remarks": remarks,
             "creator": {
                 "_id": str(submitter["_id"]),
