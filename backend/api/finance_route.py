@@ -577,7 +577,9 @@ def add_activity_detail():
 def get_activity_detail():
     try:
         collection = db["ActivityDetails"]
-        activity_detail_list = list(collection.find())
+        activity_detail_list = list(
+            collection.find().sort("time.activityStartAt", -1)
+        )
 
         result = {
             "code": 0,
