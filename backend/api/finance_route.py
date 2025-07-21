@@ -125,8 +125,8 @@ def update_purchase_orders():
             quantity_bottles = int(product_data.get("purchaseQuantityBottles", 0))
             quantity_boxes = int(product_data.get("purchaseQuantityBoxes", 0))
 
-            cost_per_bottle = int(product_info.get("costPerBottle", 0) or 0)
-            cost_per_box = int(product_info.get("costPerBox", 0) or 0)
+            cost_per_bottle = float(product_info.get("costPerBottle", 0) or 0)
+            cost_per_box = float(product_info.get("costPerBox", 0) or 0)
 
             item_amount = (cost_per_bottle * quantity_bottles) + (cost_per_box * quantity_boxes)
 
@@ -142,7 +142,7 @@ def update_purchase_orders():
             countAmount += item_amount
 
         # 確保 totalAmount 與計算結果一致
-        if countAmount != total_amount:
+        if round(float(total_amount), 2) != total_amount:
             return jsonify({"error": f"Total amount mismatch: expected {countAmount}, received {total_amount}"}), 400
 
         # 更新資料
