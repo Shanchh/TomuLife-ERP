@@ -434,6 +434,8 @@ const SalesReportForm: React.FC<SalesReportFormProps> = ({ initialData, refreshD
                                                 { label: "現金付款", value: "cash" },
                                                 { label: "匯款玉山帳戶", value: "eSunBank" },
                                                 { label: "匯款元大帳戶", value: "yuantaBank" },
+                                                { label: "信用卡付款", value: "creditCard" },
+                                                { label: "LinePay", value: "linePay" }
                                             ]}
                                         />
                                     </Form.Item>

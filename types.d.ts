@@ -124,7 +124,7 @@ export interface SalesReport {
         receivableAmount?: number;
         invoiceNumber?: string;
         paymentDate?: number;
-        paymentType?: "cash" | "eSunBank" | "yuantaBank";
+        paymentType?: "cash" | "eSunBank" | "yuantaBank" | "creditCard" | "linePay";
         remitCode?: string;
     };
     delivery: {

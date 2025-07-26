@@ -19,6 +19,8 @@ const SalesPaymentDetailBtn: React.FC<SalesPaymentDetailBtnProps> = ({ data, pro
             cash: "現金",
             eSunBank: "玉山銀行",
             yuantaBank: "元大銀行",
+            creditCard: "信用卡付款",
+            linePay: "LinePay"
         };
         return map[value] ?? "-";
     };
