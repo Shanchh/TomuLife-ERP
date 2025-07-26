@@ -95,7 +95,7 @@ const ExportMultipleInvoiceModal: React.FC<Props> = ({ open, onClose, reports, p
 
           <Flex style={{ width: "100%", borderTop: '2px solid black' }}>
             <span style={{ width: 387, fontSize: 16, display: 'flex', justifyContent: 'end', alignItems: 'center' }}>
-              應該帳款總金額:
+              應收帳款總金額:
             </span>
             <span style={{ width: 130, fontSize: 14, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
               ${totalAmount.toLocaleString()}
