@@ -128,7 +128,7 @@ export interface SalesReport {
         remitCode?: string;
     };
     delivery: {
-        deliveryMethod: "selfDelivery" | "hsinchuLogistics";
+        deliveryMethod: "selfDelivery" | "hsinchuLogistics" | "customerCollect";
         deliveryBoxes?: number;
     };
     others: {

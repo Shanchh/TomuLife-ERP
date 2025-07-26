@@ -473,6 +473,7 @@ const SalesReportForm: React.FC<SalesReportFormProps> = ({ initialData, refreshD
                                     options={[
                                         { label: "自送", value: "selfDelivery" },
                                         { label: "新竹貨運", value: "hsinchuLogistics" },
+                                        { label: "客戶自取", value: "customerCollect" },
                                     ]}
                                 />
                             </Form.Item>
