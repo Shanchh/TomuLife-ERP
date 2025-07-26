@@ -36,7 +36,7 @@ const ExportMultipleInvoiceModal: React.FC<Props> = ({ open, onClose, reports, p
     <Modal
       open={open}
       onCancel={onClose}
-      title="發票"
+      title="請款明細"
       footer={null}
       width={700}
       centered={false}
