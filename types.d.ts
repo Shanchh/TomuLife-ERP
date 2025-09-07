@@ -115,6 +115,7 @@ export interface SalesReport {
             [productId: string]: {
                 quantity: string;
                 price: string;
+                note: string;
             }
         }
     }

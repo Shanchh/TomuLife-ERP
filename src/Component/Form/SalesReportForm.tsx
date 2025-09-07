@@ -334,6 +334,17 @@ const SalesReportForm: React.FC<SalesReportFormProps> = ({ initialData, refreshD
                                     </Form.Item>
                                 </Col>
                             </Row>
+
+                            <Row>
+                                <Col xs={24} sm={24}>
+                                    <Form.Item
+                                        label="商品備註"
+                                        name={["productSection", "products", product._id, "note"]}
+                                    >
+                                        <Input/>
+                                    </Form.Item>
+                                </Col>
+                            </Row>
                         </Card>
                     ))}
 

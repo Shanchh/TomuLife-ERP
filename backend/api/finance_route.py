@@ -284,7 +284,8 @@ def create_sales_reports():
         for product_id, item in raw_products.items():
             transformed_products[product_id] = {
                 "quantity": int(item.get("quantity", 0)),
-                "price": int(item.get("price", 0))
+                "price": int(item.get("price", 0)),
+                "note": item.get("note")
             }
 
         values["productSection"]["products"] = transformed_products
@@ -329,7 +330,8 @@ def update_sales_reports():
         for product_id, item in raw_products.items():
             transformed_products[product_id] = {
                 "quantity": int(item.get("quantity", 0)),
-                "price": int(item.get("price", 0))
+                "price": int(item.get("price", 0)),
+                "note": item.get("note")
             }
 
         values["productSection"]["products"] = transformed_products
