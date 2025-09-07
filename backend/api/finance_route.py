@@ -418,30 +418,32 @@ def get_sales_payment_summary():
         }))
 
         total_count = len(orders)
-        paid_total = 0
-        paid_count = 0
-        unpaid_total = 0
-        unpaid_count = 0
+        stats = {
+            "paidCount": 0,
+            "paidAmount": 0,
+            "unpaidCount": 0,
+            "unpaidAmount": 0,
+            "totalAmount": 0,
+            "taxAmount": 0,
+        }
 
         for order in orders:
             billing = order.get("billing", {})
             status = billing.get("paymentStatus")
-            amount = billing.get("receivableAmount", 0)
+            amount = int(billing.get("receivableAmount", 0))
+            tax = int(billing.get("taxCount", 0))
 
-            if status == "paid":
-                paid_count += 1
-                paid_total += amount
-            elif status == "unpaid":
-                unpaid_count += 1
-                unpaid_total += amount
+            if status in ("paid", "unpaid"):
+                stats[f"{status}Count"] += 1
+                stats[f"{status}Amount"] += amount
+
+            stats["totalAmount"] += amount
+            stats["taxAmount"] += tax
 
         result = {
             "code": 0,
             "totalCount": total_count,
-            "paidCount": paid_count,
-            "paidAmount": paid_total,
-            "unpaidCount": unpaid_count,
-            "unpaidAmount": unpaid_total
+            **stats
         }
 
         return jsonify(result), 200
