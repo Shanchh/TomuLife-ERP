@@ -186,7 +186,6 @@ const SalesReportTable: React.FC<SalesReportTableProps> = ({
         rowKey={(record) => record._id}
         tableLayout="fixed"
         loading={loading}
-        bordered
         columns={columns}
         dataSource={data}
         pagination={{
@@ -197,6 +196,7 @@ const SalesReportTable: React.FC<SalesReportTableProps> = ({
           position: ["bottomLeft"],
           onChange: onPageChange,
         }}
+        scroll={{ x: "max-content" }}
       />
 
       <ExportMultipleInvoiceModal
