@@ -405,6 +405,18 @@ const SalesReportForm: React.FC<SalesReportFormProps> = ({ initialData, refreshD
                                 </Form.Item>
                             )}
                         </Col>
+
+                        <Col xs={24} sm={24} md={12}>
+                            {paymentStatus !== "gift" && isTaxIncluded === "included" && (
+                                <Form.Item
+                                    label="稅金額"
+                                    name={["billing", "taxCount"]}
+                                    rules={[{ required: true, message: '請填寫稅金額' }]}
+                                >
+                                    <Input placeholder="稅金額" />
+                                </Form.Item>
+                            )}
+                        </Col>
                     </Row>
 
                     {paymentStatus === "paid" && (

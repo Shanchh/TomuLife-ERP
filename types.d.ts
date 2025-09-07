@@ -126,6 +126,7 @@ export interface SalesReport {
         paymentDate?: number;
         paymentType?: "cash" | "eSunBank" | "yuantaBank" | "creditCard" | "linePay";
         remitCode?: string;
+        taxCount?: string;
     };
     delivery: {
         deliveryMethod: "selfDelivery" | "hsinchuLogistics" | "customerCollect";
