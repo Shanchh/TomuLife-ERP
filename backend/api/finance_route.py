@@ -470,6 +470,8 @@ def get_payment_method_summary():
         cash = 0
         e_sun = 0
         yuan_ta = 0
+        credit_card = 0
+        line_pay = 0
 
         for order in orders:
             billing = order.get("billing", {})
@@ -486,12 +488,18 @@ def get_payment_method_summary():
                 e_sun += amount
             elif payment_type == "yuantaBank":
                 yuan_ta += amount
+            elif payment_type == "creditCard":
+                credit_card += amount
+            elif payment_type == "linePay":
+                line_pay += amount
 
         result = {
             "code": 0,
             "cashAmount": cash,
             "eSunAmount": e_sun,
-            "yuantaAmount": yuan_ta
+            "yuantaAmount": yuan_ta,
+            "creditCard": credit_card,
+            "linePay": line_pay
         }
 
         return jsonify(result), 200
