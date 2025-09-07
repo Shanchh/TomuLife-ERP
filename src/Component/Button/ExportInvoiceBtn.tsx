@@ -47,11 +47,11 @@ const ExportInvoiceBtn: React.FC<ExportInvoiceBtnProps> = ({ data, productList }
                         <table border={1} style={{ width: '100%', borderCollapse: 'collapse' }}>
                             <thead>
                                 <tr style={{ border: '1px solid black' }}>
-                                    <th>出貨日期</th>
-                                    <th>品項</th>
-                                    <th>數量</th>
-                                    <th>單價</th>
-                                    <th>商品金額</th>
+                                    <th style={{ minWidth: 100 }}>出貨日期</th>
+                                    <th style={{ minWidth: 120 }}>品項</th>
+                                    <th style={{ minWidth: 45 }}>數量</th>
+                                    <th style={{ minWidth: 45 }}>單價</th>
+                                    <th style={{ minWidth: 90 }}>商品金額</th>
                                     <th>備註</th>
                                 </tr>
                             </thead>

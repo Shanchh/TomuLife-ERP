@@ -23,6 +23,8 @@ const ExportMultipleInvoiceModal: React.FC<Props> = ({ open, onClose, reports, p
       return {
         productName: product?.productName || '未知商品',
         quantity: productInfo.quantity,
+        price: productInfo.price,
+        note: productInfo.note,
         amount: Number(productInfo.price) * Number(productInfo.quantity),
         purchaseDate,
       };
@@ -57,51 +59,36 @@ const ExportMultipleInvoiceModal: React.FC<Props> = ({ open, onClose, reports, p
             <span style={{ fontSize: 16 }}>應收帳款-{customerName}</span>
           </Flex>
 
-          <Flex style={{ width: '100%', borderTop: '2px solid black', borderBottom: '2px solid black' }}>
-            <span style={{ width: 100, fontSize: 16, display: 'flex', justifyContent: 'center', alignItems: 'center', borderRight: '1px solid #ccc' }}>
-              出貨日期
-            </span>
-            <span style={{ flex: 1, fontSize: 16, display: 'flex', justifyContent: 'center', alignItems: 'center', borderRight: '1px solid #ccc' }}>
-              品項
-            </span>
-            <span style={{ width: 100, fontSize: 16, display: 'flex', justifyContent: 'center', alignItems: 'center', borderRight: '1px solid #ccc' }}>
-              數量
-            </span>
-            <span style={{ width: 130, fontSize: 16, display: 'flex', justifyContent: 'center', alignItems: 'center', borderRight: '1px solid #ccc' }}>
-              金額(未稅)
-            </span>
-            <span style={{ width: 130, fontSize: 16, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-              備註
-            </span>
-          </Flex>
+          <table border={1} style={{ width: '100%', borderCollapse: 'collapse' }}>
+            <thead>
+              <tr style={{ border: '1px solid black' }}>
+                <th style={{ minWidth: 100}}>出貨日期</th>
+                <th style={{ minWidth: 120}}>品項</th>
+                <th style={{ minWidth: 45}}>數量</th>
+                <th style={{ minWidth: 45}}>單價</th>
+                <th style={{ minWidth: 90}}>商品金額</th>
+                <th>備註</th>
+              </tr>
+            </thead>
+            <tbody>
+              {mergedProducts.map((item, index) => {
+                return (
+                  <tr style={{ border: '1px solid #ccc' }}>
+                    <td align='center'>{item.purchaseDate}</td>
+                    <td align='center'>{item.productName}</td>
+                    <td align='center'>{item.quantity}</td>
+                    <td align='center'>{item.price.toLocaleString()}</td>
+                    <td align='center'>{item.amount.toLocaleString()}</td>
+                    <td align='center'>{item.note}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
 
-          {mergedProducts.map((item, index) => (
-            <Flex key={index} style={{ width: '100%', borderBottom: '1px solid #ccc' }}>
-              <span style={{ width: 100, fontSize: 14, display: 'flex', justifyContent: 'center', alignItems: 'center', borderRight: '1px solid #eee' }}>
-                {item.purchaseDate}
-              </span>
-              <span style={{ flex: 1, fontSize: 14, display: 'flex', justifyContent: 'center', alignItems: 'center', borderRight: '1px solid #eee' }}>
-                {item.productName}
-              </span>
-              <span style={{ width: 100, fontSize: 14, display: 'flex', justifyContent: 'center', alignItems: 'center', borderRight: '1px solid #eee' }}>
-                {item.quantity}
-              </span>
-              <span style={{ width: 130, fontSize: 14, display: 'flex', justifyContent: 'center', alignItems: 'center', borderRight: '1px solid #eee' }}>
-                {item.amount.toLocaleString()}
-              </span>
-              <span style={{ width: 130 }} />
-            </Flex>
-          ))}
-
-          <Flex style={{ width: "100%", borderTop: '2px solid black' }}>
-            <span style={{ width: 387, fontSize: 16, display: 'flex', justifyContent: 'end', alignItems: 'center' }}>
-              應收帳款總金額:
-            </span>
-            <span style={{ width: 130, fontSize: 14, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-              ${totalAmount.toLocaleString()}
-            </span>
-            <span style={{ width: 130 }} />
-          </Flex>
+          <span style={{ display: "block", textAlign: "right", fontSize: 16, padding: "0px 8px", }} >
+            應收帳款總金額: {`$${totalAmount.toLocaleString() ?? "0"}`}
+          </span>
 
           <div style={{ height: 30 }} />
 
