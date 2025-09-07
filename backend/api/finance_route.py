@@ -294,6 +294,7 @@ def create_sales_reports():
             values["billing"]["isTaxIncluded"] = None
         else:
             values["billing"]["receivableAmount"] = int(values["billing"]["receivableAmount"])
+            values["billing"]["taxCount"] = int(values["billing"]["taxCount"])
 
         # 插入進貨訂單
         collection = db["SalesReport"]
@@ -338,6 +339,7 @@ def update_sales_reports():
             values["billing"]["isTaxIncluded"] = None
         else:
             values["billing"]["receivableAmount"] = int(values["billing"]["receivableAmount"])
+            values["billing"]["taxCount"] = int(values["billing"]["taxCount"])
 
         collection = db["SalesReport"]
 
